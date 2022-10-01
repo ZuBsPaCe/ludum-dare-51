@@ -14,6 +14,8 @@ const GROUP_PLANET := "Planet"
 const GROUP_GOAL := "Goal"
 
 
+var rand_effect := RandomNumberGenerator.new()
+
 var _center_node: Node2D
 var _settings: Dictionary
 

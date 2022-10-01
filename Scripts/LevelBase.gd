@@ -93,6 +93,9 @@ func _process(delta: float):
 			
 			if Input.is_action_pressed("booster"):
 				booster_force = Vector2.RIGHT.rotated(_ship.rotation) * 500.0
+				_ship.booster_enabled = true
+			else:
+				_ship.booster_enabled = false
 			
 			var planet_forces := Vector2.ZERO
 			
@@ -105,7 +108,6 @@ func _process(delta: float):
 				if force > 0.0:
 					force = force * force
 					planet_forces += planet_vec.normalized() * force * 2000.0
-			
 			
 			_ship_velocity += (booster_force + planet_forces) * delta
 			
@@ -137,6 +139,7 @@ func _on_LevelStateMachine_enter_state():
 				entity.rotation = _initial_rotations[entity]
 			
 			_gravity_line.visible = false
+			_ship.booster_enabled = false
 			
 			_level_state.set_state_after_frame(LevelState.START)
 		
@@ -145,6 +148,7 @@ func _on_LevelStateMachine_enter_state():
 			
 		LevelState.GOAL_REACHED:
 			_ship.collision_enabled = false
+			_ship.booster_enabled = false
 			
 			State.goal_reached()
 
