@@ -6,6 +6,9 @@ const GameState := preload("res://Scripts/Tools/Examples/ExampleGameState.gd").G
 
 export(GameState) var _initial_game_state := GameState.MAIN_MENU
 
+export(float, 0.0, 1.0, 0.01) var _debug := 0.0
+export(float, 0.0, 1.0, 0.01) var _debug_speed := 0.0
+
 
 onready var _game_state := $GameStateMachine
 
@@ -43,9 +46,16 @@ func _ready():
 		_levels[level_index] = level
 		Tools.remove_from_parent(level)
 	
+	Globals.star_anim_right_left_factor = 1.0
+	#Globals.star_anim_top_down_factor = 1.0
+	#Globals.star_anim_3d_factor = 1.0
+	Globals.star_anim_speed = 0.0
+	
 	Effects.create_star_layer(1)
 	Effects.create_star_layer(2)
 	Effects.create_star_layer(3)
+	
+
 	
 	_game_state.setup(
 		_initial_game_state,
@@ -55,6 +65,11 @@ func _ready():
 
 
 func _process(_delta):
+	Globals.star_anim_right_left_factor = 1.0 - _debug
+	Globals.star_anim_3d_factor = _debug
+	Globals.star_anim_speed = _debug_speed
+	
+	
 	if _game_state.current != GameState.GAME:
 		return
 	

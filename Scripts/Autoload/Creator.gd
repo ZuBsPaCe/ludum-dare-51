@@ -50,14 +50,14 @@ func destroy_ship_particle(particle: Node2D) -> void:
 	_ship_particle_cache.append(particle)
 	
 
-func create_star(p_pos: Vector2, p_container: Node2D, p_frame: int, p_blink: bool) -> void:	
+func create_star(p_container: Node2D, p_frame: int, p_blink: bool, p_step_factor: float, p_speed_factor: float, p_scale: float) -> void:	
 	var star: Node2D = _star_scene_cache.pop_back()
 	
 	if star == null:
 		star = _star_scene.instance()
 		
 	p_container.add_child(star)
-	star.setup(p_pos, p_frame, p_blink)
+	star.setup(p_frame, p_blink, p_step_factor, p_speed_factor, p_scale)
 	
 	
 

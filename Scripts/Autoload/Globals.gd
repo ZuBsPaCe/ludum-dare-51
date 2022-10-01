@@ -3,6 +3,10 @@ extends Node
 const TILE_SIZE := 16.0
 const HALF_TILE_SIZE := TILE_SIZE / 2.0
 
+const canvas_size := Vector2(1920, 1080)
+const canvas_rect := Rect2(canvas_size / -2.0, canvas_size)
+const larger_canvas_rect :=  Rect2((canvas_size + Vector2(10.0, 10.0)) / -2.0, canvas_size + Vector2(10.0, 10.0))
+
 const SETTING_FULLSCREEN := "Fullscreen"
 const SETTING_WINDOW_WIDTH := "Window Width"
 const SETTING_WINDOW_HEIGHT := "Window Height"
@@ -18,6 +22,11 @@ var rand_effect := RandomNumberGenerator.new()
 
 var _center_node: Node2D
 var _settings: Dictionary
+
+var star_anim_right_left_factor: float
+var star_anim_top_down_factor: float
+var star_anim_3d_factor: float
+var star_anim_speed := 0.0
 
 
 func _ready():

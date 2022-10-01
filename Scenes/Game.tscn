@@ -21,6 +21,7 @@ glow_high_quality = true
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
+_debug_speed = 0.24
 
 [node name="GameStateMachine" type="Node" parent="."]
 script = ExtResource( 4 )
