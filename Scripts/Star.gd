@@ -99,11 +99,12 @@ func _get_pos_3d() -> Vector2:
 	end1.y = start1.y
 	
 	
-	var center_3d := Vector2(400.0, -100)
+	var center_3d : Vector2 = lerp(Vector2(4000.0, -100), Vector2(400.0, -100), factor_3d)
+	
 	
 	var start2 : Vector2 = lerp(start1, center_3d, factor_3d)
 	
-	var rot_factor = (_spawn_factor - 0.5) * 1.6 * PI
+	var rot_factor = (_spawn_factor - 0.5) * 1.8 * PI
 	var end2 := (end1 - start2).rotated(rot_factor)
 	
 	var start = lerp(start1, start2, factor_3d)
