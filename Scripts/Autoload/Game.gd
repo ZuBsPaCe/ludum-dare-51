@@ -16,8 +16,9 @@ var _levels := {}
 func _ready():
 	Globals.setup()
 	State.setup()
-	Effects.setup($Camera2D)
-	Creator.setup($ParticleContainer)
+	Effects.setup($Camera2D, $StarContainer)
+	Creator.setup(
+		$ParticleContainer)
 	
 	set_fullscreen(Globals.get_setting(Globals.SETTING_FULLSCREEN))
 	
@@ -41,6 +42,10 @@ func _ready():
 		level_index += 1
 		_levels[level_index] = level
 		Tools.remove_from_parent(level)
+	
+	Effects.create_star_layer(1)
+	Effects.create_star_layer(2)
+	Effects.create_star_layer(3)
 	
 	_game_state.setup(
 		_initial_game_state,

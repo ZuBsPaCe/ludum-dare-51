@@ -30,6 +30,8 @@ script = ExtResource( 4 )
 [node name="GameOverlay" parent="." instance=ExtResource( 5 )]
 visible = false
 
+[node name="StarContainer" type="Node2D" parent="."]
+
 [node name="ParticleContainer" type="Node2D" parent="."]
 
 [node name="Levels" type="Node2D" parent="."]
