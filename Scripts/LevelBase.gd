@@ -170,7 +170,7 @@ func _on_LevelStateMachine_enter_state():
 			
 			_gravity_line.visible = false
 			
-			_level_state.set_state(LevelState.START)
+			_level_state.set_state_after_frame(LevelState.START)
 		
 		LevelState.START:
 			_ship.collision_enabled = true
