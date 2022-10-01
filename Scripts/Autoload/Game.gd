@@ -17,6 +17,7 @@ func _ready():
 	Globals.setup()
 	State.setup()
 	Effects.setup($Camera2D)
+	Creator.setup($ParticleContainer)
 	
 	set_fullscreen(Globals.get_setting(Globals.SETTING_FULLSCREEN))
 	
@@ -48,7 +49,7 @@ func _ready():
 		funcref(self, "_on_GameStateMachine_exit_state"))
 
 
-func _process(delta):
+func _process(_delta):
 	if _game_state.current != GameState.GAME:
 		return
 	

@@ -17,8 +17,10 @@ var _goal: Area2D
 var _initial_positions: Dictionary
 var _initial_rotations: Dictionary
 
-var _ship_move_speed := 500.0
+var _ship_move_speed := 350.0
 var _ship_turn_speed := PI
+
+var _ship_velocity := Vector2.ZERO
 
 var _locked_planet: KinematicBody2D
 var _locked_distance: float
@@ -81,13 +83,36 @@ func _process(delta: float):
 			_ship.rotation = Globals.get_global_mouse_position().angle_to_point(_ship.position)
 			
 			if Input.is_action_just_pressed("start"):
-				_level_state.set_state(LevelState.RUN_STRAIGHT)
+				_ship_velocity = Vector2.RIGHT.rotated(_ship.rotation) * _ship_move_speed
+				_level_state.set_state(LevelState.FLYING)
 		
-		LevelState.RUN_STRAIGHT:			
+		LevelState.FLYING:
+			_ship.rotation = Globals.get_global_mouse_position().angle_to_point(_ship.position)
+			
+			var booster_force := Vector2.ZERO
+			
+			if Input.is_action_pressed("booster"):
+				booster_force = Vector2.RIGHT.rotated(_ship.rotation) * 500.0
+			
+			var planet_forces := Vector2.ZERO
+			
+			for planet in _planets:
+				var planet_vec: Vector2 = planet.position - _ship.position
+				var distance := planet_vec.length()
+				
+				var force := (1.0 - distance / 500.0)
+
+				if force > 0.0:
+					force = force * force
+					planet_forces += planet_vec.normalized() * force * 2000.0
+			
+			
+			_ship_velocity += (booster_force + planet_forces) * delta
+			
 			var direction = Vector2.RIGHT.rotated(_ship.rotation)
 			
 			var reset := false
-			if _ship.move_and_collide(direction * _ship_move_speed * delta):
+			if _ship.move_and_collide(_ship_velocity * delta):
 				reset = true
 			elif !Tools.get_visible_rect().has_point(_ship.position):
 				reset = true
@@ -95,62 +120,7 @@ func _process(delta: float):
 			if reset:
 				_level_state.set_state(LevelState.RESET)	
 				return
-			
-			if Input.is_action_just_pressed("gravity_lock"):
-				_locked_planet = nearest_planet
-				_locked_distance = nearest_distance
-				
-				#Tools.set_new_parent(_ship, _locked_planet)			
-				
-				_level_state.set_state(LevelState.GRAVITY_LOCKED)
-		
-		LevelState.GRAVITY_LOCKED:
-			var direction := Vector2.RIGHT.rotated(_ship.rotation)
-			
-			var diff := _ship.position - _locked_planet.position
-			var radius := diff.length()
-			var normal := diff.normalized()
-			var tangent_right := normal.rotated(deg2rad(90))
-			var tangent_left := normal.rotated(deg2rad(-90))
-			var angle_right := direction.angle_to(tangent_right)
-			var angle_left := direction.angle_to(tangent_left)
-			
-			angle_left = fmod(angle_left, PI)
-			angle_right = fmod(angle_right, PI)
-			
-			var circumference := 2.0 * radius * PI
-			var angle_speed := _ship_move_speed / circumference * 2.0 * PI
-			
-			var desired_target: Vector2
-			
-			if abs(angle_right) <= abs(angle_left):
-				desired_target = _locked_planet.position + diff.rotated(angle_speed * delta)
-			else:
-				desired_target = _locked_planet.position + diff.rotated(-angle_speed * delta)
-
-
-			var desired_movement := desired_target - _ship.position
-			var desired_change_angle := direction.angle_to(desired_movement)
-			desired_change_angle = fmod(desired_change_angle, PI)
-			
-			var max_change_angle := _ship_turn_speed * delta
-			var change_angle := clamp(desired_change_angle, -max_change_angle, max_change_angle)
-
-			_ship.rotation += change_angle
-			direction = Vector2.RIGHT.rotated(_ship.rotation)
-				
-			var reset := false
-			if _ship.move_and_collide(direction * _ship_move_speed * delta):
-				reset = true
-			
-			if reset:
-				_level_state.set_state(LevelState.RESET)	
-				return
-			
-			if Input.is_action_just_pressed("gravity_lock"):
-				#Tools.set_new_parent(_ship, _entity_container)
-				_level_state.set_state(LevelState.RUN_STRAIGHT)
-				
+	
 
 func _on_goal_body_entered(body: Node):
 	if body.is_in_group(Globals.GROUP_SHIP):
@@ -159,9 +129,7 @@ func _on_goal_body_entered(body: Node):
 
 func _on_LevelStateMachine_enter_state():
 	match _level_state.current:
-		LevelState.RESET:
-			#Tools.set_new_parent(_ship, _entity_container)
-			
+		LevelState.RESET:			
 			for entity in _initial_positions.keys():
 				entity.position = _initial_positions[entity]
 			

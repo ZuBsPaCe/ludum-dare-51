@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Stipple.png-33fb74287233014836ce6733183369b1.stex"
+path="res://.import/RoundParticle.png-32ec5d459685fc21079539e8eb988a21.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Helpers/GravityLine/Stipple.png"
-dest_files=[ "res://.import/Stipple.png-33fb74287233014836ce6733183369b1.stex" ]
+source_file="res://Helpers/Particles/RoundParticle.png"
+dest_files=[ "res://.import/RoundParticle.png-32ec5d459685fc21079539e8eb988a21.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=1
+flags/repeat=0
 flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false

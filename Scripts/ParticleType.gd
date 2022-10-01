@@ -1,0 +1,4 @@
+enum {
+	ROUND_PARTICLE,
+	SHIP_PARTICLE
+}
