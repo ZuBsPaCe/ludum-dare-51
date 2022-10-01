@@ -38,7 +38,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Godot-base-code"
+config/name="Slingshot"
 run/main_scene="res://Scenes/Game.tscn"
 boot_splash/image="res://Sprites/BootSplash/zubspace_banner.png"
 boot_splash/fullsize=false
@@ -48,10 +48,10 @@ config/windows_native_icon="res://Sprites/Icon/icon.ico"
 
 [autoload]
 
-Globals="*res://Scripts/Tools/Examples/ExampleGlobals.gd"
+Globals="*res://Scripts/Autoload/Globals.gd"
 Tools="*res://Scripts/Tools/Tools.gd"
-State="*res://Scripts/Tools/Examples/ExampleState.gd"
-Effects="*res://Scripts/Tools/Examples/ExampleEffects.gd"
+State="*res://Scripts/Autoload/State.gd"
+Effects="*res://Scripts/Autoload/Effects.gd"
 
 [debug]
 
@@ -61,7 +61,8 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1920
 window/size/height=1080
-window/size/fullscreen=true
+window/size/test_width=960
+window/size/test_height=540
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
@@ -128,6 +129,18 @@ right={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777233,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+start={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":32,"unicode":0,"echo":false,"script":null)
+ ]
+}
+gravity_lock={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":32,"unicode":0,"echo":false,"script":null)
  ]
 }
 

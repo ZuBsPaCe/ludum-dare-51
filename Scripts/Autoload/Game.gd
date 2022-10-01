@@ -10,6 +10,9 @@ export(GameState) var _initial_game_state := GameState.MAIN_MENU
 onready var _game_state := $GameStateMachine
 
 
+var _levels := {}
+
+
 func _ready():
 	Globals.setup()
 	State.setup()
@@ -28,7 +31,15 @@ func _ready():
 	$MainMenu.connect("change_volume", self, "change_volume")
 	$GameOverlay.connect("switch_game_state", self, "switch_game_state")
 	
+	State.connect("on_goal_reached", self, "on_goal_reached")
+	
 	get_tree().connect("screen_resized", self, "on_screen_resized")
+	
+	var level_index := 0
+	for level in $Levels.get_children():
+		level_index += 1
+		_levels[level_index] = level
+		Tools.remove_from_parent(level)
 	
 	_game_state.setup(
 		_initial_game_state,
@@ -62,6 +73,32 @@ func switch_game_state(new_state):
 	_game_state.set_state(new_state)
 
 
+func on_goal_reached(old_level_num: int, new_level_num: int):
+	stop_level(old_level_num)
+	
+	if !start_level(new_level_num):
+		switch_game_state(GameState.MAIN_MENU)
+
+
+func stop_level(level_num: int):
+	var level = _levels[level_num]
+	
+	level.stop_level()
+	Tools.remove_from_parent(level)
+	
+	
+func start_level(level_num: int) -> bool:
+	if not _levels.has(level_num):
+		return false
+	
+	var level = _levels[level_num]
+	
+	Tools.set_new_parent(level, $Levels)
+	level.start_level()
+	level.visible = true
+	return true
+
+
 func set_fullscreen(enabled: bool):		
 	if OS.window_fullscreen == enabled:
 		return
@@ -90,12 +127,12 @@ func _on_GameStateMachine_enter_state():
 	match _game_state.current:
 		GameState.MAIN_MENU:
 			$MainMenu.visible = true
-			Effects.shake(Vector2.RIGHT)
 
 		GameState.GAME:
 			State.on_game_start()
 			$GameOverlay.visible = true
-			Effects.shake(Vector2.RIGHT)
+			
+			start_level(1)
 
 		_:
 			assert(false, "Unknown game state")

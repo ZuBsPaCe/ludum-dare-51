@@ -1,0 +1,10 @@
+[gd_scene format=2]
+
+[node name="Planet" type="KinematicBody2D" groups=["Planet"]]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color( 0.203922, 0.803922, 0.494118, 1 )
+polygon = PoolVector2Array( 0, -39, 22, -30, 34, -17, 36, 13, 16, 37, -15, 34, -36, 13, -35, -20, -21, -34 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( 0, -39, 22, -30, 34, -17, 36, 13, 16, 37, -15, 34, -36, 13, -35, -20, -21, -34 )

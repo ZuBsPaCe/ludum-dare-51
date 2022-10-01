@@ -1,0 +1,8 @@
+enum {
+	RESET = 0,
+	START = 1,
+	RUN_STRAIGHT = 2,
+	GRAVITY_LOCKED = 3,
+	GOAL_REACHED = 4
+}
+
