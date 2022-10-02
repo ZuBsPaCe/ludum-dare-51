@@ -21,6 +21,7 @@ const STAR_ANIM_SOURCE := Vector2(400.0, -100)
 
 
 var rand_effect := RandomNumberGenerator.new()
+var rand_asteroid := RandomNumberGenerator.new()
 
 var _center_node: Node2D
 var _settings: Dictionary

@@ -83,20 +83,23 @@ func start_level(ship: KinematicBody2D):
 func reset(immediate: bool):
 	if immediate:
 		for entity in _initial_positions.keys():
+			entity.set_process(false)
 			entity.position = _initial_positions[entity]
 		
 		for entity in _initial_rotations.keys():
 			entity.rotation = _initial_rotations[entity]
 	else:
 		for entity in _initial_positions.keys():
+			entity.set_process(false)
 			get_tree().create_tween().tween_property(entity, "position", _initial_positions[entity], 1.0)
 		
 		for entity in _initial_rotations.keys():
 			get_tree().create_tween().tween_property(entity, "rotation", _initial_rotations[entity], 1.0)
 			
 		yield(get_tree().create_timer(1.0), "timeout")
-#
-#	_gravity_line.visible = false
+	
+	for entity in _initial_positions.keys():
+			entity.set_process(true)
 	
 
 func stop_level():

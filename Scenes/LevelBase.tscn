@@ -9,6 +9,8 @@ script = ExtResource( 1 )
 [node name="LevelStateMachine" type="Node" parent="."]
 script = ExtResource( 2 )
 
+[node name="Space" type="Sprite" parent="."]
+
 [node name="EntityContainer" type="Node2D" parent="."]
 
 [node name="VisualsContainer" type="Node2D" parent="."]

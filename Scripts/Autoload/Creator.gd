@@ -75,4 +75,5 @@ func create_gravity_line(var container) -> Node2D:
 
 func destroy_gravity_line(gravity_line: Node2D) -> void:
 	gravity_line.queue_free()
+
 	
