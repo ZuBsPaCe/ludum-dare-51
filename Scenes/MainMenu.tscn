@@ -127,6 +127,8 @@ unique_name_in_owner = true
 margin_top = 379.0
 margin_right = 202.0
 margin_bottom = 443.0
+focus_next = NodePath("../ExitButton")
+focus_previous = NodePath("../../../HBoxContainer2/GridContainer/SoundSlider")
 text = "Start"
 
 [node name="ExitButton" type="Button" parent="MainMenu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
@@ -134,6 +136,8 @@ unique_name_in_owner = true
 margin_top = 493.0
 margin_right = 202.0
 margin_bottom = 557.0
+focus_next = NodePath("../../../HBoxContainer2/GridContainer/MusicSlider")
+focus_previous = NodePath("../StartButton")
 text = "Quit"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MainMenu/MarginContainer/VBoxContainer"]
@@ -161,9 +165,11 @@ margin_top = 21.0
 margin_right = 640.0
 margin_bottom = 37.0
 rect_min_size = Vector2( 400, 0 )
+focus_next = NodePath("../SoundSlider")
+focus_previous = NodePath("../../../HBoxContainer/VBoxContainer/ExitButton")
 size_flags_vertical = 4
 max_value = 1.0
-step = 0.01
+step = 0.05
 value = 0.8
 
 [node name="SoundLabel" type="Label" parent="MainMenu/MarginContainer/VBoxContainer/HBoxContainer2/GridContainer"]
@@ -179,9 +185,11 @@ margin_top = 83.0
 margin_right = 640.0
 margin_bottom = 99.0
 rect_min_size = Vector2( 400, 0 )
+focus_next = NodePath("../../../HBoxContainer/VBoxContainer/StartButton")
+focus_previous = NodePath("../MusicSlider")
 size_flags_vertical = 4
 max_value = 1.0
-step = 0.01
+step = 0.05
 value = 0.8
 
 [node name="MenuShipRoot" type="Node2D" parent="."]

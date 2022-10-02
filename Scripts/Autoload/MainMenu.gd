@@ -45,7 +45,8 @@ func _ready():
 	restart_title_avoid_tween()
 	restart_title_asteroid_tween()
 	restart_title_scale_tween()
-		
+	
+	get_node("%StartButton").grab_focus()
 		
 
 func setup(
