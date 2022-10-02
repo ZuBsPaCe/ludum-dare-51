@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Theme/MyTheme.tres" type="Theme" id=1]
 [ext_resource path="res://Scripts/Autoload/MainMenu.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Props/MenuTitle/MenuTitleAvoid.png" type="Texture" id=5]
 [ext_resource path="res://Props/MenuTitle/MenuTitleAvoidBlur.png" type="Texture" id=6]
 [ext_resource path="res://Props/MenuTitle/MenuTitleAsteroidBlur.png" type="Texture" id=7]
+[ext_resource path="res://Sounds/FlyAway.wav" type="AudioStream" id=8]
 
 [sub_resource type="Animation" id=1]
 length = 0.001
@@ -62,6 +63,20 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1, 1 ), Vector2( 1.5, 0.5 ), Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/2/type = "audio"
+tracks/2/path = NodePath("FlyAwaySound")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 8 )
+} ],
+"times": PoolRealArray( 0.25 )
 }
 
 [node name="MainMenu" type="Node2D"]
@@ -216,6 +231,11 @@ position = Vector2( 400, -100 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 1 )
 anims/StartGame = SubResource( 2 )
+
+[node name="FlyAwaySound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = -17.63
+bus = "Sounds"
 
 [connection signal="pressed" from="MainMenu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="MainMenu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/ExitButton" to="." method="_on_ExitButton_pressed"]

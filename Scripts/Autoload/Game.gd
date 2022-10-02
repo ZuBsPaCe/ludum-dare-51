@@ -5,6 +5,7 @@ const GameState := preload("res://Scripts/GameState.gd").GameState
 const _shoot_sound := preload("res://Sounds/Shoot.wav")
 const _asteroid_destroyed_sound := preload("res://Sounds/AsteroidDestroyed.wav")
 const _bullet_hit_sound := preload("res://Sounds/BulletHit.wav")
+const _killed_sound := preload("res://Sounds/Killed.wav")
 
 
 export(GameState) var _initial_game_state := GameState.MAIN_MENU
@@ -73,8 +74,9 @@ func _ready():
 		
 	Globals.sound = _sound
 	_sound.register(Globals.SOUND_SHOOT, _shoot_sound, 75)
-	_sound.register(Globals.SOUND_BULLET_HIT, _bullet_hit_sound, 75)
+	_sound.register(Globals.SOUND_BULLET_HIT, _bullet_hit_sound, 65)
 	_sound.register(Globals.SOUND_ASTEROID_DESTROYED, _asteroid_destroyed_sound, 70)
+	_sound.register(Globals.SOUND_KILLED, _killed_sound, 65)
 
 
 func _process(_delta):

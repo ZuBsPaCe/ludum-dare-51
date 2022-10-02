@@ -7,6 +7,7 @@ const _star_scene := preload("res://Helpers/Stars/Star.tscn")
 const _gravity_line_scene := preload("res://Helpers/GravityLine/GravityLine.tscn")
 const _bullet_scene := preload("res://Helpers/Bullets/Bullet.tscn")
 const _cloud_scene := preload("res://Helpers/Cloud/Cloud.tscn")
+const _explosion_scene := preload("res://Scenes/Explosion.tscn")
 
 
 var _bullet_container: Node2D
@@ -110,4 +111,16 @@ func create_clouds(p_pos: Vector2) -> void:
 
 func destroy_cloud(cloud: Node2D) -> void:
 	cloud.queue_free()
+	
+	
+func create_explosion(p_pos: Vector2, p_velocity: Vector2) -> Node2D:
+	var explosion = _explosion_scene.instance()
+	_particle_container.add_child(explosion)
+	explosion.setup(p_pos, p_velocity)
+	return explosion
+	
+
+func destroy_explosion(explosion: Node2D) -> void:
+	explosion.queue_free()
+	
 

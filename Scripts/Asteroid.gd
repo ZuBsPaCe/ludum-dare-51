@@ -46,6 +46,7 @@ func hurt():
 		return
 		
 	Creator.create_clouds(position)
+	Creator.create_explosion(position, Vector2.ZERO)
 	
 	Globals.sound.play(Globals.SOUND_ASTEROID_DESTROYED, position)
 	

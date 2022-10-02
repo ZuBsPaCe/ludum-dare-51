@@ -25,6 +25,7 @@ const STAR_ANIM_SOURCE := Vector2(400.0, -100)
 const SOUND_SHOOT := "Shoot"
 const SOUND_BULLET_HIT := "BulletHit"
 const SOUND_ASTEROID_DESTROYED := "AsteroidDestroyed"
+const SOUND_KILLED := "Killed"
 
 var rand_effect := RandomNumberGenerator.new()
 var rand_asteroid := RandomNumberGenerator.new()

@@ -197,6 +197,9 @@ func _process(delta: float):
 				reset = true
 			
 			if reset:
+				Creator.create_explosion(_ship.position, _ship_velocity * 0.5)
+				Globals.sound.play(Globals.SOUND_KILLED, _ship.position)
+				
 				_level_state.set_state(LevelState.SHIP_DESTROYED)
 				return
 			
