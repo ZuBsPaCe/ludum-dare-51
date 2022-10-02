@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Theme/MyTheme.tres" type="Theme" id=1]
 [ext_resource path="res://Scripts/Autoload/MainMenu.gd" type="Script" id=2]
@@ -8,6 +8,14 @@
 [ext_resource path="res://Props/MenuTitle/MenuTitleAvoidBlur.png" type="Texture" id=6]
 [ext_resource path="res://Props/MenuTitle/MenuTitleAsteroidBlur.png" type="Texture" id=7]
 [ext_resource path="res://Sounds/FlyAway.wav" type="AudioStream" id=8]
+[ext_resource path="res://Props/Explosion/ExplosionParticle.png" type="Texture" id=9]
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.272727 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0, 0.484935 )
+colors = PoolColorArray( 0.730469, 0.0865827, 0.0199738, 1, 0.84375, 0.741886, 0.276855, 1 )
 
 [sub_resource type="Animation" id=1]
 length = 0.001
@@ -189,6 +197,21 @@ unique_name_in_owner = true
 position = Vector2( 468, 0 )
 z_index = 1
 texture = ExtResource( 3 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="MenuShipRoot/MenuShipLargeOffset/MenuShipSmallOffset/MenuShip"]
+position = Vector2( -268, 22 )
+rotation = 3.1168
+z_index = 1
+amount = 128
+texture = ExtResource( 9 )
+emission_shape = 1
+emission_sphere_radius = 67.18
+spread = 14.32
+gravity = Vector2( 0, 0 )
+initial_velocity = 2000.0
+scale_amount = 4.79
+scale_amount_curve = SubResource( 3 )
+color_ramp = SubResource( 4 )
 
 [node name="Title" type="Node2D" parent="."]
 position = Vector2( -99, -27 )
