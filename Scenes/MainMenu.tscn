@@ -228,7 +228,6 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 modulate = Color( 0.933333, 0.32549, 0.32549, 1 )
 position = Vector2( -110, -543 )
-scale = Vector2( 1, 1 )
 texture = ExtResource( 6 )
 
 [node name="Avoid" type="Sprite" parent="Title/TitleRoot/TitleAvoidRoot"]
@@ -242,7 +241,6 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 modulate = Color( 0.933333, 0.32549, 0.32549, 1 )
 position = Vector2( 586, -361.429 )
-scale = Vector2( 1, 1 )
 texture = ExtResource( 7 )
 
 [node name="Asteroid" type="Sprite" parent="Title/TitleRoot/TitleAsteroidRoot"]

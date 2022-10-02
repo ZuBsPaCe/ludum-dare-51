@@ -1,0 +1,36 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Props/Asteroids/Asteroid5.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Props/Asteroids/Asteroid7.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Props/Asteroids/Asteroid8.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Props/Asteroids/Asteroid4.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Props/Asteroids/Asteroid3.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Props/Asteroids/Asteroid1.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Props/Asteroids/Asteroid6.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Props/Asteroids/Asteroid2.tscn" type="PackedScene" id=8]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Asteroid1" parent="." instance=ExtResource( 6 )]
+position = Vector2( -624, -296 )
+
+[node name="Asteroid2" parent="." instance=ExtResource( 8 )]
+position = Vector2( -584, -208 )
+
+[node name="Asteroid3" parent="." instance=ExtResource( 5 )]
+position = Vector2( -544, -320 )
+
+[node name="Asteroid4" parent="." instance=ExtResource( 4 )]
+position = Vector2( -648, -136 )
+
+[node name="Asteroid5" parent="." instance=ExtResource( 1 )]
+position = Vector2( -496, -240 )
+
+[node name="Asteroid6" parent="." instance=ExtResource( 7 )]
+position = Vector2( -424, -288 )
+
+[node name="Asteroid7" parent="." instance=ExtResource( 2 )]
+position = Vector2( -536, -128 )
+
+[node name="Asteroid8" parent="." instance=ExtResource( 3 )]
+position = Vector2( -432, -200 )

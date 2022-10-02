@@ -8,7 +8,7 @@
 extents = Vector2( 100, 100 )
 
 [node name="Goal" type="Area2D" groups=["Goal"]]
-modulate = Color( 0.09, 0.74, 0.04, 0.5 )
+modulate = Color( 0.0901961, 0.741176, 0.0392157, 0.313726 )
 
 [node name="Center" type="Polygon2D" parent="."]
 material = ExtResource( 3 )

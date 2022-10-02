@@ -178,7 +178,7 @@ func _process(delta: float):
 					
 				if force > 0.0:
 					#force = force * force
-					planet_forces += planet_vec.normalized() * force * 1000.0
+					planet_forces += planet_vec.normalized() * force * 500.0
 				
 					gravity_line.visible = true
 					gravity_line.position = planet.position

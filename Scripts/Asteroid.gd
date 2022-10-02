@@ -28,7 +28,7 @@ func _ready():
 	Globals.rand_asteroid.seed = get_index()
 	_rotation_speed = max(1.0 - (_diameter / max_diameter), 0.05) * Globals.rand_asteroid.randf_range(-0.75, 0.75) * TAU
 
-	_total_health = int(clamp((_diameter / max_diameter) * 5.0, 1.0, 5.0))
+	_total_health = 1
 	_health = _total_health
 
 

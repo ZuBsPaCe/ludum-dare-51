@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Scripts/Autoload/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -15,14 +15,19 @@
 [ext_resource path="res://Props/Success/SuccessBlur.png" type="Texture" id=13]
 [ext_resource path="res://Props/Success/Success.png" type="Texture" id=14]
 [ext_resource path="res://Theme/MyTheme.tres" type="Theme" id=15]
+[ext_resource path="res://Levels/Level 04.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Levels/Level 05.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Levels/Level 06.tscn" type="PackedScene" id=18]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
-background_canvas_max_layer = 1
+background_canvas_max_layer = 3
+glow_enabled = true
 glow_levels/4 = true
-glow_intensity = 5.06
-glow_strength = 1.42
+glow_intensity = 1.45
+glow_strength = 1.16
 glow_blend_mode = 1
+glow_hdr_scale = 0.9
 glow_bicubic_upscale = true
 glow_high_quality = true
 
@@ -202,6 +207,15 @@ visible = false
 [node name="Level 03" parent="Levels" instance=ExtResource( 7 )]
 visible = false
 
+[node name="Level 04" parent="Levels" instance=ExtResource( 16 )]
+visible = false
+
+[node name="Level 05" parent="Levels" instance=ExtResource( 17 )]
+visible = false
+
+[node name="Level 06" parent="Levels" instance=ExtResource( 18 )]
+visible = false
+
 [node name="Ship" parent="." instance=ExtResource( 9 )]
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -254,19 +268,19 @@ margin_bottom = 1070.0
 
 [node name="Control" type="Control" parent="Success/CanvasLayer/MarginContainer/VBoxContainer"]
 margin_right = 1900.0
-margin_bottom = 1013.0
+margin_bottom = 992.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Success/CanvasLayer/MarginContainer/VBoxContainer"]
-margin_top = 1017.0
+margin_top = 996.0
 margin_right = 1900.0
 margin_bottom = 1060.0
 alignment = 1
 
 [node name="SuccessContinueButton" type="Button" parent="Success/CanvasLayer/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 871.0
-margin_right = 1029.0
-margin_bottom = 43.0
+margin_left = 804.0
+margin_right = 1095.0
+margin_bottom = 64.0
 text = "Continue"
 
 [connection signal="pressed" from="Success/CanvasLayer/MarginContainer/VBoxContainer/HBoxContainer/SuccessContinueButton" to="." method="_on_SuccessContinueButton_pressed"]
