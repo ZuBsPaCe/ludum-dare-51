@@ -47,6 +47,7 @@ func hurt():
 		
 	Creator.create_clouds(position)
 	Creator.create_explosion(position, Vector2.ZERO)
+	Effects.shake(Vector2.RIGHT.rotated(Globals.rand_effect.randf() * TAU))
 	
 	Globals.sound.play(Globals.SOUND_ASTEROID_DESTROYED, position)
 	

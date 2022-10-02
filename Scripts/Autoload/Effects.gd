@@ -13,7 +13,7 @@ func setup(
 
 func shake(
 		dir: Vector2, 
-		intensity = 10.0, 
+		intensity = 5.0, 
 		frequency = 20.0, 
 		duration = 0.5) -> void:
 	_camera.start_shake(dir, intensity, frequency, duration)
