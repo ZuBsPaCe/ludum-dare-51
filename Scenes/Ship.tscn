@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/Ship.gd" type="Script" id=1]
 [ext_resource path="res://Props/Ship/Hull.png" type="Texture" id=2]
 [ext_resource path="res://Props/Ship/Nozzle.png" type="Texture" id=3]
 [ext_resource path="res://Props/Ship/Window.png" type="Texture" id=4]
+[ext_resource path="res://Sounds/Ship.mp3" type="AudioStream" id=5]
+[ext_resource path="res://Sounds/EngineSound.mp3" type="AudioStream" id=6]
 
 [node name="Ship" type="KinematicBody2D" groups=["Ship"]]
 process_priority = -1
@@ -24,3 +26,14 @@ texture = ExtResource( 2 )
 [node name="Window" type="Sprite" parent="."]
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 4 )
+
+[node name="BoosterSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+volume_db = -8.0
+bus = "Sounds"
+
+[node name="EngineSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+volume_db = -2.862
+autoplay = true
+bus = "Sounds"

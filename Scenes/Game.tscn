@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scripts/Autoload/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://Levels/Level 03.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Levels/Level 02.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scenes/Ship.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Music/SlowMystery.mp3" type="AudioStream" id=10]
+[ext_resource path="res://Music/MenuMusic.mp3" type="AudioStream" id=11]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -200,6 +202,9 @@ visible = false
 current = true
 script = ExtResource( 2 )
 
+[node name="Listener2D" type="Listener2D" parent="Camera2D"]
+current = true
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 1 )
 
@@ -207,3 +212,11 @@ environment = SubResource( 1 )
 anims/Intro = SubResource( 2 )
 anims/RESET = SubResource( 3 )
 anims/WarpRight = SubResource( 4 )
+
+[node name="MisteryMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+bus = "Music"
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+bus = "Music"

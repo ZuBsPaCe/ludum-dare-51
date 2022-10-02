@@ -208,6 +208,7 @@ func _on_GameStateMachine_enter_state():
 	match _game_state.current:
 		GameState.MAIN_MENU:
 			$MainMenu.visible = true
+			$MenuMusic.play()
 			
 		GameState.INTRO:
 			$TransitionAnimationPlayer.play("Intro")
@@ -217,17 +218,23 @@ func _on_GameStateMachine_enter_state():
 			State.on_game_start()
 			$GameOverlay.visible = true
 			
+			$MisteryMusic.play()
+			
 			start_level(1)
 
 
 func _on_GameStateMachine_exit_state():
 	match _game_state.current:
+		GameState.MAIN_MENU:
+			$MenuMusic.stop()
 		GameState.INTRO:
 			$MainMenu.visible = false
 
 		GameState.GAME:
 			State.on_game_stopped()
 			$GameOverlay.visible = false
+			
+			$MisteryMusic.stop()
 
 
 func _on_MainMenu_intro_anim_finished():
