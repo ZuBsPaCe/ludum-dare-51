@@ -99,7 +99,7 @@ func _get_pos_3d() -> Vector2:
 	end1.y = start1.y
 	
 	
-	var center_3d : Vector2 = lerp(Vector2(4000.0, -100), Vector2(400.0, -100), factor_3d)
+	var center_3d : Vector2 = lerp(Vector2(4000.0, -100), Globals.STAR_ANIM_SOURCE, factor_3d)
 	
 	
 	var start2 : Vector2 = lerp(start1, center_3d, factor_3d)

@@ -17,6 +17,8 @@ const GROUP_SHIP := "Ship"
 const GROUP_PLANET := "Planet"
 const GROUP_GOAL := "Goal"
 
+const STAR_ANIM_SOURCE := Vector2(400.0, -100)
+
 
 var rand_effect := RandomNumberGenerator.new()
 
