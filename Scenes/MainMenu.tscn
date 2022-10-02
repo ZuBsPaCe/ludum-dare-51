@@ -1,8 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Theme/MyTheme.tres" type="Theme" id=1]
 [ext_resource path="res://Scripts/Autoload/MainMenu.gd" type="Script" id=2]
 [ext_resource path="res://Props/MenuShip/MenuShip.png" type="Texture" id=3]
+[ext_resource path="res://Props/MenuTitle/MenuTitleAsteroid.png" type="Texture" id=4]
+[ext_resource path="res://Props/MenuTitle/MenuTitleAvoid.png" type="Texture" id=5]
+[ext_resource path="res://Props/MenuTitle/MenuTitleAvoidBlur.png" type="Texture" id=6]
+[ext_resource path="res://Props/MenuTitle/MenuTitleAsteroidBlur.png" type="Texture" id=7]
 
 [sub_resource type="Animation" id=1]
 length = 0.001
@@ -168,7 +172,43 @@ unique_name_in_owner = true
 [node name="MenuShip" type="Sprite" parent="MenuShipRoot/MenuShipLargeOffset/MenuShipSmallOffset"]
 unique_name_in_owner = true
 position = Vector2( 468, 0 )
+z_index = 1
 texture = ExtResource( 3 )
+
+[node name="Title" type="Node2D" parent="."]
+position = Vector2( -99, -27 )
+
+[node name="TitleRoot" type="Node2D" parent="Title"]
+unique_name_in_owner = true
+scale = Vector2( 0.7, 0.7 )
+
+[node name="TitleAvoidRoot" type="Node2D" parent="Title/TitleRoot"]
+unique_name_in_owner = true
+
+[node name="AvoidBlur" type="Sprite" parent="Title/TitleRoot/TitleAvoidRoot"]
+unique_name_in_owner = true
+modulate = Color( 0.933333, 0.32549, 0.32549, 1 )
+position = Vector2( -110, -543 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 6 )
+
+[node name="Avoid" type="Sprite" parent="Title/TitleRoot/TitleAvoidRoot"]
+position = Vector2( -110, -543 )
+texture = ExtResource( 5 )
+
+[node name="TitleAsteroidRoot" type="Node2D" parent="Title/TitleRoot"]
+unique_name_in_owner = true
+
+[node name="AsteroidBlur" type="Sprite" parent="Title/TitleRoot/TitleAsteroidRoot"]
+unique_name_in_owner = true
+modulate = Color( 0.933333, 0.32549, 0.32549, 1 )
+position = Vector2( 586, -361.429 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 7 )
+
+[node name="Asteroid" type="Sprite" parent="Title/TitleRoot/TitleAsteroidRoot"]
+position = Vector2( 586, -361.429 )
+texture = ExtResource( 4 )
 
 [node name="StarSource" type="Node2D" parent="."]
 position = Vector2( 400, -100 )
