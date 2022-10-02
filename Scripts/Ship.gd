@@ -6,6 +6,7 @@ onready var _window := $Window
 onready var _booster_sound := $BoosterSound
 
 
+
 var collision_enabled: bool setget _set_collision_enabled, _get_collision_enabled
 var booster_enabled := false
 
@@ -65,7 +66,11 @@ func _process(delta):
 			_booster_sound.stop()
 	
 	_last_position = position
-	
+
+
+func start_shoot_sound():
+	Globals.sound.play(Globals.SOUND_SHOOT, position)
+
 
 func _set_collision_enabled(value):
 	_collision.disabled = !value

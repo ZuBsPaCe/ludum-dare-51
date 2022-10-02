@@ -5,8 +5,11 @@ const _exhaust_particle_scene := preload("res://Helpers/Particles/ExhaustParticl
 const _ship_particle_scene := preload("res://Helpers/Particles/ShipParticle.tscn")
 const _star_scene := preload("res://Helpers/Stars/Star.tscn")
 const _gravity_line_scene := preload("res://Helpers/GravityLine/GravityLine.tscn")
+const _bullet_scene := preload("res://Helpers/Bullets/Bullet.tscn")
+const _cloud_scene := preload("res://Helpers/Cloud/Cloud.tscn")
 
 
+var _bullet_container: Node2D
 var _particle_container: Node2D
 
 
@@ -17,7 +20,9 @@ var _star_scene_cache := []
 
 
 func setup(
+		p_bullet_container: Node2D,
 		p_particle_container: Node2D):
+	_bullet_container = p_bullet_container
 	_particle_container = p_particle_container
 
 
@@ -75,5 +80,34 @@ func create_gravity_line(var container) -> Node2D:
 
 func destroy_gravity_line(gravity_line: Node2D) -> void:
 	gravity_line.queue_free()
-
 	
+	
+func create_bullet(p_pos: Vector2, p_velocity: Vector2) -> Node2D:
+	var bullet = _bullet_scene.instance()
+	_bullet_container.add_child(bullet)
+	bullet.setup(p_pos, p_velocity)
+	return bullet
+	
+
+func destroy_bullet(bullet: Node2D) -> void:
+	bullet.queue_free()
+	
+
+func create_clouds(p_pos: Vector2) -> void:
+	for i in range(15):
+		var rot: float = Globals.rand_effect.randf() * TAU
+		var velocity: Vector2 = Vector2.RIGHT.rotated(Globals.rand_effect.randf() * TAU) * Globals.rand_effect.randf() * 25.0
+		
+		var pos: Vector2 = p_pos + velocity.normalized() * Globals.rand_effect.randf() * 20.0
+		
+		var rotation_velocity: float = Globals.rand_effect.randf() * TAU
+		var lifetime: float = Globals.rand_effect.randf() * 2.0 + 1.0
+		
+		var cloud = _cloud_scene.instance()
+		_particle_container.add_child(cloud)
+		cloud.setup(pos, rot, velocity, rotation_velocity, lifetime)
+	
+
+func destroy_cloud(cloud: Node2D) -> void:
+	cloud.queue_free()
+

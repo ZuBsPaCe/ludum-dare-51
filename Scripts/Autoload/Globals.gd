@@ -16,12 +16,20 @@ const SETTING_SOUND_VOLUME := "Sound"
 const GROUP_SHIP := "Ship"
 const GROUP_PLANET := "Planet"
 const GROUP_GOAL := "Goal"
+const GROUP_BULLET := "Bullet"
+const GROUP_ASTEROID := "Asteroid"
 
 const STAR_ANIM_SOURCE := Vector2(400.0, -100)
 
 
+const SOUND_SHOOT := "Shoot"
+const SOUND_BULLET_HIT := "BulletHit"
+const SOUND_ASTEROID_DESTROYED := "AsteroidDestroyed"
+
 var rand_effect := RandomNumberGenerator.new()
 var rand_asteroid := RandomNumberGenerator.new()
+
+var sound
 
 var _center_node: Node2D
 var _settings: Dictionary

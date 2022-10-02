@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Scripts/Autoload/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Scenes/Ship.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Music/SlowMystery.mp3" type="AudioStream" id=10]
 [ext_resource path="res://Music/MenuMusic.mp3" type="AudioStream" id=11]
+[ext_resource path="res://Scripts/Tools/Sound.gd" type="Script" id=12]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -186,6 +187,8 @@ visible = false
 
 [node name="ParticleContainer" type="Node2D" parent="."]
 
+[node name="BulletContainer" type="Node2D" parent="."]
+
 [node name="Levels" type="Node2D" parent="."]
 
 [node name="Level 01" parent="Levels" instance=ExtResource( 6 )]
@@ -220,3 +223,6 @@ bus = "Music"
 [node name="MenuMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 11 )
 bus = "Music"
+
+[node name="Sound" type="Node2D" parent="."]
+script = ExtResource( 12 )

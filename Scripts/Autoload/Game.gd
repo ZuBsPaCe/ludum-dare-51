@@ -2,6 +2,9 @@ extends Node2D
 
 
 const GameState := preload("res://Scripts/GameState.gd").GameState
+const _shoot_sound := preload("res://Sounds/Shoot.wav")
+const _asteroid_destroyed_sound := preload("res://Sounds/AsteroidDestroyed.wav")
+const _bullet_hit_sound := preload("res://Sounds/BulletHit.wav")
 
 
 export(GameState) var _initial_game_state := GameState.MAIN_MENU
@@ -9,6 +12,7 @@ export(GameState) var _initial_game_state := GameState.MAIN_MENU
 
 onready var _game_state := $GameStateMachine
 onready var _ship := $Ship
+onready var _sound := $Sound
 
 
 export var star_anim_right_left_factor := 0.0
@@ -25,6 +29,7 @@ func _ready():
 	State.setup()
 	Effects.setup($Camera2D, $StarContainer)
 	Creator.setup(
+		$BulletContainer,
 		$ParticleContainer)
 	
 	set_fullscreen(Globals.get_setting(Globals.SETTING_FULLSCREEN))
@@ -64,6 +69,12 @@ func _ready():
 		funcref(self, "_on_GameStateMachine_enter_state"),
 		FuncRef.new(),
 		funcref(self, "_on_GameStateMachine_exit_state"))
+		
+		
+	Globals.sound = _sound
+	_sound.register(Globals.SOUND_SHOOT, _shoot_sound, 75)
+	_sound.register(Globals.SOUND_BULLET_HIT, _bullet_hit_sound, 75)
+	_sound.register(Globals.SOUND_ASTEROID_DESTROYED, _asteroid_destroyed_sound, 70)
 
 
 func _process(_delta):
@@ -124,12 +135,17 @@ func start_level(level_num: int) -> bool:
 	
 	var level = _levels[level_num]
 	
+	for bullet in $BulletContainer.get_children():
+		bullet.disable_collision()
+	
 	Tools.set_new_parent(level, $Levels)
 	level.reset(true)
 	level.modulate.a = 0.0
 	level.visible = true
 	
 	get_tree().create_tween().tween_property(level, "modulate", Color.white, 1.0)
+	
+
 	
 	yield(move_ship_to_start(), "completed")
 	
@@ -139,6 +155,9 @@ func start_level(level_num: int) -> bool:
 
 func restart_level():
 	var level = _levels[State.level]
+	
+	for bullet in $BulletContainer.get_children():
+		bullet.disable_collision()
 	
 	level.reset(false)
 	yield(move_ship_to_start(), "completed")

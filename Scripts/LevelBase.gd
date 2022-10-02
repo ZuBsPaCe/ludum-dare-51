@@ -15,6 +15,7 @@ var initial_ship_rotation: float
 
 var _ship: KinematicBody2D
 var _planets: Array
+var _asteroids: Array
 var _goal: Area2D
 
 
@@ -31,6 +32,9 @@ var _locked_distance: float
 
 var _gravity_lines := {}
 
+var _shoot_cooldown := Cooldown.new()
+var _shoot_right := true
+
 
 func _ready():
 	var debug_scene := get_tree().current_scene == self
@@ -44,6 +48,9 @@ func _ready():
 			
 		elif entity.is_in_group(Globals.GROUP_PLANET):
 			_planets.append(entity)
+			
+		elif entity.is_in_group(Globals.GROUP_ASTEROID):
+			_asteroids.append(entity)
 			
 		_initial_positions[entity] = entity.position
 		_initial_rotations[entity] = entity.rotation
@@ -59,12 +66,14 @@ func _ready():
 		FuncRef.new(),
 		funcref(self, "_on_LevelStateMachine_exit_state"))
 	
+	_shoot_cooldown.setup(self, 0.05, true)
+	
 	_goal.connect("body_entered", self, "_on_goal_body_entered")
 			
 	set_process(false)
 	
 	if debug_scene:
-		Creator.setup(self)
+		Creator.setup(self, self)
 		$Camera2D.current = true
 		start_level(_ship)
 	else:
@@ -75,12 +84,16 @@ func _ready():
 
 func start_level(ship: KinematicBody2D):
 	_ship = ship
+	_shoot_right = true
 	
 	_level_state.set_state(LevelState.START)
 	set_process(true)
 
 
 func reset(immediate: bool):
+	for entity in _asteroids:
+		entity.set_collision_enabled(false)
+	
 	if immediate:
 		for entity in _initial_positions.keys():
 			entity.set_process(false)
@@ -100,6 +113,12 @@ func reset(immediate: bool):
 	
 	for entity in _initial_positions.keys():
 			entity.set_process(true)
+			
+	for entity in _asteroids:
+		entity.set_collision_enabled(true)
+		entity.reset_health()
+			
+	_shoot_right = true
 	
 
 func stop_level():
@@ -132,8 +151,12 @@ func _process(delta: float):
 				_ship.booster_enabled = true
 			else:
 				_ship.booster_enabled = false
+				
+			var look_direction = Vector2.RIGHT.rotated(_ship.rotation)
+				
 			
 			var planet_forces := Vector2.ZERO
+			
 			
 			for planet in _planets:
 				var inner_radius: float = 512.0 * planet.scale.x
@@ -167,8 +190,6 @@ func _process(delta: float):
 			
 			_ship_velocity += (booster_force + planet_forces) * delta
 			
-			var direction = Vector2.RIGHT.rotated(_ship.rotation)
-			
 			var reset := false
 			if _ship.move_and_collide(_ship_velocity * delta):
 				reset = true
@@ -176,7 +197,22 @@ func _process(delta: float):
 				reset = true
 			
 			if reset:
-				_level_state.set_state(LevelState.SHIP_DESTROYED)	
+				_level_state.set_state(LevelState.SHIP_DESTROYED)
+				return
+			
+			if Input.is_action_pressed("shoot") and _shoot_cooldown.done:
+				_shoot_cooldown.restart()
+				
+				var bullet_offset: Vector2
+				if _shoot_right:
+					bullet_offset = look_direction.rotated(PI * 0.5) * 8.0
+				else:
+					bullet_offset = look_direction.rotated(-PI * 0.5) * 8.0
+					
+				_shoot_right = !_shoot_right
+								
+				Creator.create_bullet(_ship.position + bullet_offset + look_direction * 32.0, look_direction * 1024.0)
+				_ship.start_shoot_sound()
 	
 
 func _on_goal_body_entered(body: Node):
