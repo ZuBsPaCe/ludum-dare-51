@@ -1,8 +1,64 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Theme/MyTheme.tres" type="Theme" id=1]
 [ext_resource path="res://Scripts/Autoload/MainMenu.gd" type="Script" id=2]
 [ext_resource path="res://Props/MenuShip/MenuShip.png" type="Texture" id=3]
+
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("MenuShipRoot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -840, 72 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("MenuShipRoot:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "StartGame"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("MenuShipRoot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 0.65 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -840, 72 ), Vector2( -840, 72 ), Vector2( 400, -100 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("MenuShipRoot:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 0.65 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.5, 0.5 ), Vector2( 1e-05, 1e-05 ) ]
+}
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource( 2 )
@@ -101,6 +157,7 @@ step = 0.01
 value = 0.8
 
 [node name="MenuShipRoot" type="Node2D" parent="."]
+position = Vector2( -840, 72 )
 
 [node name="MenuShipLargeOffset" type="Node2D" parent="MenuShipRoot"]
 unique_name_in_owner = true
@@ -110,11 +167,15 @@ unique_name_in_owner = true
 
 [node name="MenuShip" type="Sprite" parent="MenuShipRoot/MenuShipLargeOffset/MenuShipSmallOffset"]
 unique_name_in_owner = true
-position = Vector2( -354, 46 )
+position = Vector2( 468, 0 )
 texture = ExtResource( 3 )
 
 [node name="StarSource" type="Node2D" parent="."]
 position = Vector2( 400, -100 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 1 )
+anims/StartGame = SubResource( 2 )
 
 [connection signal="pressed" from="MainMenu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="MainMenu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/ExitButton" to="." method="_on_ExitButton_pressed"]

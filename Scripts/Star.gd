@@ -40,14 +40,6 @@ func setup(p_frame: int, p_blink: bool, p_step_factor: float, p_speed_factor: fl
 
 func _update_pos():
 	var pos := Vector2.ZERO
-	
-	
-#	if Globals.star_anim_3d_factor > 0.25:
-#		pos = _get_pos_3d(1.0 - (Globals.star_anim_3d_factor - 0.25) / 0.75)
-#	else:
-#		if Globals.star_anim_3d_factor > 0.0:
-#			var anim_3d_factor := Globals.star_anim_3d_factor / 0.25
-#			pos = anim_3d_factor * _get_pos_3d(1.0)
 
 	if Globals.star_anim_3d_factor > 0.0:
 		pos = _get_pos_3d()
@@ -58,16 +50,6 @@ func _update_pos():
 		pos = Globals.star_anim_top_down_factor * _get_pos_top_down()
 	
 	position = pos
-	
-#	if Globals.star_anim_top_down_factor == 0.0:
-#		if Globals.star_anim_3d_factor == 0.0:
-#			position = _get_pos_right_left()
-#		else:
-#			position = _get_pos_3d()
-#	elif Globals.star_anim_top_down_factor > 0.0:
-#		position = _get_pos_top_down()
-#
-#	Global.star_anim_right_left_factor == 0.0
 
 
 	
@@ -114,7 +96,6 @@ func _get_pos_3d() -> Vector2:
 	
 	
 	
-	
 func _get_pos_3d_old(shift_factor: float) -> Vector2:
 	var start := Vector2(300.0, -100) + shift_factor * Vector2(Globals.canvas_rect.size.x - 300, 0)
 	var end: Vector2
@@ -144,55 +125,6 @@ func _process(delta):
 		_step_factor -= 1.0
 		
 	_update_pos()
-	
-	return
-#	if Globals.start_anim == 0:
-#		return
-#
-#	if Globals.start_anim == 1:
-#		position -= Vector2(1000.0, 0) * delta
-#		if position.x < Globals.larger_canvas_rect.position.x:
-#			position.x = Globals.larger_canvas_rect.end.x + Globals.rand_effect.randf() * 50
-#
-#			var min_y := int(Globals.larger_canvas_rect.position.y)
-#			var max_y := int(Globals.larger_canvas_rect.end.y)
-#
-#			position.y = Globals.rand_effect.randi_range(min_y, max_y)
-#
-#	elif Globals.start_anim == 2:
-#		position += Vector2(0, 1000.0) * delta
-#		if position.y > Globals.larger_canvas_rect.end.y:
-#			position.y = Globals.larger_canvas_rect.position.y - Globals.rand_effect.randf() * 5
-#
-#			var min_x := int(Globals.larger_canvas_rect.position.x)
-#			var max_x := int(Globals.larger_canvas_rect.end.x)
-#
-#			position.x = Globals.rand_effect.randi_range(min_x, max_x)
-#
-#	elif Globals.start_anim == 3:
-#		var center := Vector2(300.0, -100)
-#		var dir: Vector2
-#
-#		var factor: float
-#
-#		if position != center:
-#			#var target := Vector2(-980.0, 560.0)
-#			var diff := position - center
-#			var dist := diff.length()
-#			factor = dist / 1000.0
-#			factor *= factor
-#			dir = (position - center).normalized()
-#		else:
-#			dir = Vector2.RIGHT.rotated(Globals.rand_effect.randf() * TAU)
-#			factor = 0.0
-#
-#		var speed := clamp(factor, 0.02, 1.0) * 2000.0
-#		print(speed)
-#
-#		position += dir * speed * delta
-#
-#		if not Globals.larger_canvas_rect.has_point(position):
-#			position = center
 
 
 func _blink_timeout():

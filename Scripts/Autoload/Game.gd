@@ -1,16 +1,19 @@
 extends Node2D
 
 
-const GameState := preload("res://Scripts/Tools/Examples/ExampleGameState.gd").GameState
+const GameState := preload("res://Scripts/GameState.gd").GameState
 
 
 export(GameState) var _initial_game_state := GameState.MAIN_MENU
 
-export(float, 0.0, 1.0, 0.01) var _debug := 0.0
-export(float, 0.0, 1.0, 0.01) var _debug_speed := 0.0
-
 
 onready var _game_state := $GameStateMachine
+
+
+export var star_anim_right_left_factor := 0.0
+export var star_anim_top_down_factor := 0.0
+export var star_anim_3d_factor := 1.0
+export var star_anim_speed := 1.0
 
 
 var _levels := {}
@@ -46,16 +49,12 @@ func _ready():
 		_levels[level_index] = level
 		Tools.remove_from_parent(level)
 	
-	Globals.star_anim_right_left_factor = 1.0
-	#Globals.star_anim_top_down_factor = 1.0
-	#Globals.star_anim_3d_factor = 1.0
-	Globals.star_anim_speed = 0.0
+	_update_star_anim_properties()
+	
 	
 	Effects.create_star_layer(1)
 	Effects.create_star_layer(2)
 	Effects.create_star_layer(3)
-	
-
 	
 	_game_state.setup(
 		_initial_game_state,
@@ -65,11 +64,8 @@ func _ready():
 
 
 func _process(_delta):
-	Globals.star_anim_right_left_factor = 1.0 - _debug
-	Globals.star_anim_3d_factor = _debug
-	Globals.star_anim_speed = _debug_speed
-	
-	
+	_update_star_anim_properties()
+		
 	if _game_state.current != GameState.GAME:
 		return
 	
@@ -148,6 +144,10 @@ func _on_GameStateMachine_enter_state():
 	match _game_state.current:
 		GameState.MAIN_MENU:
 			$MainMenu.visible = true
+			
+		GameState.INTRO:
+			$TransitionAnimationPlayer.play("Intro")
+			
 
 		GameState.GAME:
 			State.on_game_start()
@@ -155,18 +155,23 @@ func _on_GameStateMachine_enter_state():
 			
 			start_level(1)
 
-		_:
-			assert(false, "Unknown game state")
-
 
 func _on_GameStateMachine_exit_state():
 	match _game_state.current:
-		GameState.MAIN_MENU:
+		GameState.INTRO:
 			$MainMenu.visible = false
 
 		GameState.GAME:
 			State.on_game_stopped()
 			$GameOverlay.visible = false
 
-		_:
-			assert(false, "Unknown game state")
+
+func _on_MainMenu_intro_anim_finished():
+	_game_state.set_state()
+
+
+func _update_star_anim_properties():
+	Globals.star_anim_3d_factor = star_anim_3d_factor
+	Globals.star_anim_right_left_factor = star_anim_right_left_factor
+	Globals.star_anim_speed = star_anim_speed
+	Globals.star_anim_top_down_factor = star_anim_top_down_factor

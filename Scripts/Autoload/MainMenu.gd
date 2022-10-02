@@ -1,7 +1,7 @@
 extends Node2D
 
 
-const GameState := preload("res://Scripts/Tools/Examples/ExampleGameState.gd").GameState
+const GameState := preload("res://Scripts/GameState.gd").GameState
 
 
 signal switch_game_state(new_state)
@@ -16,7 +16,6 @@ onready var _menu_ship_large_offset := get_node("%MenuShipLargeOffset")
 var _music_slider: Slider
 var _sound_slider: Slider
 
-var _menu_ship_default_pos: Vector2
 var _ship_small_offset := Vector2.ZERO
 var _ship_large_offset := Vector2.ZERO
 
@@ -28,8 +27,6 @@ func _ready():
 	
 	_music_slider = get_node("%MusicSlider")
 	_sound_slider = get_node("%SoundSlider")
-
-	_menu_ship_default_pos = _menu_ship.position
 	
 	restart_small_menu_ship_tween()
 	restart_large_menu_ship_tween()
@@ -62,7 +59,7 @@ func _process(_delta):
 	
 
 func _on_StartButton_pressed():
-	emit_signal("switch_game_state", GameState.GAME)
+	emit_signal("switch_game_state", GameState.INTRO)
 
 
 func _on_ExitButton_pressed():
@@ -74,3 +71,4 @@ func _on_Volume_changed(_value):
 		"change_volume", 
 		_music_slider.value, 
 		_sound_slider.value)
+
