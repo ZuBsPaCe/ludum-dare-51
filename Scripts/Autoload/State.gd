@@ -2,6 +2,7 @@ extends Node
 
 
 signal on_goal_reached(old_level_num, new_level_num)
+signal on_ship_destroyed()
 
 
 var level := 1
@@ -25,3 +26,7 @@ func goal_reached():
 	var old_level := level
 	level += 1
 	emit_signal("on_goal_reached", old_level, level)
+
+
+func ship_destroyed():
+	emit_signal("on_ship_destroyed")

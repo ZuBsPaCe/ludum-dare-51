@@ -15,6 +15,8 @@ var _last_position := Vector2.ZERO
 
 
 func _process(delta):
+	rotation = Globals.get_global_mouse_position().angle_to_point(position)
+	
 	var ship_velocity := position - _last_position
 	var ship_velocity_dir := ship_velocity.normalized()
 	

@@ -8,6 +8,7 @@ export(GameState) var _initial_game_state := GameState.MAIN_MENU
 
 
 onready var _game_state := $GameStateMachine
+onready var _ship := $Ship
 
 
 export var star_anim_right_left_factor := 0.0
@@ -34,12 +35,14 @@ func _ready():
 	
 	$MainMenu.visible = false
 	$GameOverlay.visible = false
+	$Ship.visible = false
 	
 	$MainMenu.connect("switch_game_state", self, "switch_game_state")
 	$MainMenu.connect("change_volume", self, "change_volume")
 	$GameOverlay.connect("switch_game_state", self, "switch_game_state")
 	
 	State.connect("on_goal_reached", self, "on_goal_reached")
+	State.connect("on_ship_destroyed", self, "on_ship_destroyed")
 	
 	get_tree().connect("screen_resized", self, "on_screen_resized")
 	
@@ -89,13 +92,19 @@ func on_screen_resized():
 func switch_game_state(new_state):
 	_game_state.set_state(new_state)
 
+func switch_game_state_to_game():
+	switch_game_state(GameState.GAME)
+
 
 func on_goal_reached(old_level_num: int, new_level_num: int):
 	stop_level(old_level_num)
 	
 	if !start_level(new_level_num):
 		switch_game_state(GameState.MAIN_MENU)
-
+		
+func on_ship_destroyed():
+	restart_level()
+	
 
 func stop_level(level_num: int):
 	var level = _levels[level_num]
@@ -111,9 +120,24 @@ func start_level(level_num: int) -> bool:
 	var level = _levels[level_num]
 	
 	Tools.set_new_parent(level, $Levels)
-	level.start_level()
+	level.reset(true)
+	level.modulate.a = 0.0
 	level.visible = true
+	
+	get_tree().create_tween().tween_property(level, "modulate", Color.white, 1.0)
+	
+	yield(move_ship_to_start(), "completed")
+	
+	level.start_level(_ship)
 	return true
+	
+
+func restart_level():
+	var level = _levels[State.level]
+	
+	level.reset(false)
+	yield(move_ship_to_start(), "completed")
+	level.start_level(_ship)
 
 
 func set_fullscreen(enabled: bool):		
@@ -138,6 +162,41 @@ func change_volume(music_factor: float, sound_factor: float):
 	Globals.set_setting(Globals.SETTING_MUSIC_VOLUME, music_factor)
 	Globals.set_setting(Globals.SETTING_SOUND_VOLUME, sound_factor)
 	Globals.save_settings()
+
+
+func move_ship_to_start():
+	var level = _levels[State.level]
+	
+	var canvas_size := Tools.get_canvas()
+	
+	var initial_ship_position: Vector2 = level.initial_ship_position
+	var initial_ship_rotation: float = level.initial_ship_rotation
+	
+	var enter_ship_positions := [
+		Vector2(Globals.canvas_rect.position.x - 100.0, initial_ship_position.y),
+		Vector2(Globals.canvas_rect.end.x - 100.0, initial_ship_position.y),
+		Vector2(initial_ship_position.x, Globals.canvas_rect.position.y - 100.0),
+		Vector2(initial_ship_position.x, Globals.canvas_rect.end.y + 100.0),
+	]
+	
+	var enter_ship_position: Vector2
+	var test_dist := -1.0
+	
+	for test_position in enter_ship_positions:
+		var current_dist: float = initial_ship_position.distance_to(test_position)
+		if test_dist < 0.0 || current_dist < test_dist:
+			test_dist = current_dist
+			enter_ship_position = test_position
+	
+	_ship.collision_enabled = false
+	_ship.booster_enabled = false
+	
+	_ship.position = enter_ship_position
+	_ship.rotation = initial_ship_rotation
+	_ship.visible = true
+	
+	var tween := get_tree().create_tween().tween_property(_ship, "position", initial_ship_position, 1.0)
+	yield(tween, "finished")
 
 
 func _on_GameStateMachine_enter_state():

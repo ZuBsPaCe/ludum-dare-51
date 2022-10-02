@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scripts/Autoload/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Levels/Level 01.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Levels/Level 03.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Levels/Level 02.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/Ship.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -63,6 +64,20 @@ tracks/3/enabled = true
 tracks/3/keys = {
 "points": PoolRealArray( 0.25, -0.25, 0, 0.25, 0, 0.25, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 1.2, 2.2 )
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 2.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "switch_game_state_to_game"
+} ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -129,6 +144,8 @@ visible = false
 
 [node name="Level 03" parent="Levels" instance=ExtResource( 7 )]
 visible = false
+
+[node name="Ship" parent="." instance=ExtResource( 9 )]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true

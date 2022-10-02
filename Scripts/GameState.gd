@@ -1,6 +1,6 @@
 enum GameState {
-	NONE,
-	MAIN_MENU,
-	INTRO,
-	GAME
+	NONE = 0,
+	MAIN_MENU = 1,
+	INTRO = 2,
+	GAME = 3
 }
