@@ -25,6 +25,10 @@ export var star_anim_speed := 1.0
 var _levels := {}
 
 
+var level_running := false
+var level_countdown := 10.0
+
+
 func _ready():
 	Globals.setup()
 	State.setup()
@@ -42,6 +46,8 @@ func _ready():
 	$MainMenu.visible = false
 	$GameOverlay.visible = false
 	$Ship.visible = false
+	$Success.visible = false
+	$Success/CanvasLayer.visible = false
 	
 	$MainMenu.connect("switch_game_state", self, "switch_game_state")
 	$MainMenu.connect("change_volume", self, "change_volume")
@@ -79,11 +85,19 @@ func _ready():
 	_sound.register(Globals.SOUND_KILLED, _killed_sound, 65)
 
 
-func _process(_delta):
+func _process(delta):
 	_update_star_anim_properties()
 		
-	if _game_state.current != GameState.GAME:
-		return
+	if level_running:
+		level_countdown -= delta
+		if level_countdown <= 0.0:
+			level_countdown = 0.0
+			level_running = false
+			restart_level()
+		
+		$GameOverlay.set_countdown(level_countdown)
+
+		
 	
 #	$Dummy.position += $Dummy.position.direction_to(Globals.get_global_mouse_position()) * 100.0 * delta
 #	$Dummy.rotation = -PI * 0.5 + $Dummy.position.angle_to_point(Globals.get_global_mouse_position())
@@ -107,6 +121,10 @@ func switch_game_state(new_state):
 
 func switch_game_state_to_game():
 	switch_game_state(GameState.GAME)
+	
+	
+func switch_game_state_to_main_menu():
+	switch_game_state(GameState.MAIN_MENU)
 
 
 func on_goal_reached(old_level_num: int, new_level_num: int):
@@ -116,13 +134,18 @@ func on_goal_reached(old_level_num: int, new_level_num: int):
 	yield(get_tree().create_timer(0.5), "timeout")
 	
 	if !start_level(new_level_num):
-		switch_game_state(GameState.MAIN_MENU)
+		switch_game_state(GameState.SUCCESS)
 		
 func on_ship_destroyed():
 	restart_level()
 	
 
 func stop_level(level_num: int):
+	level_running = false
+	
+	if not _levels.has(level_num):
+		return false
+		
 	var level = _levels[level_num]
 	
 	get_tree().create_tween().tween_property(level, "modulate", Color(1.0, 1.0, 1.0, 0.0), 1.0)
@@ -152,10 +175,13 @@ func start_level(level_num: int) -> bool:
 	yield(move_ship_to_start(), "completed")
 	
 	level.start_level(_ship)
+	level_running = true
+	level_countdown = 10.0
 	return true
 	
 
 func restart_level():
+	level_running = false
 	var level = _levels[State.level]
 	
 	for bullet in $BulletContainer.get_children():
@@ -164,6 +190,8 @@ func restart_level():
 	level.reset(false)
 	yield(move_ship_to_start(), "completed")
 	level.start_level(_ship)
+	level_running = true
+	level_countdown = 10.0
 
 
 func set_fullscreen(enabled: bool):		
@@ -228,34 +256,56 @@ func move_ship_to_start():
 func _on_GameStateMachine_enter_state():
 	match _game_state.current:
 		GameState.MAIN_MENU:
-			$MainMenu.visible = true
+			$MainMenu.set_visible_hack(true, true)
+			$MainMenu.reset_anim()
 			$MenuMusic.play()
 			
 		GameState.INTRO:
 			$TransitionAnimationPlayer.play("Intro")
+			$MainMenu.set_visible_hack(true, false)
 			
 
 		GameState.GAME:
 			State.on_game_start()
 			$GameOverlay.visible = true
+			$MainMenu.set_visible_hack(false, false)
 			
 			$MisteryMusic.play()
 			
 			start_level(1)
+			
+		GameState.SUCCESS:
+			level_running = false
+			$Success.visible = true
+			$Success/CanvasLayer.visible = true
 
 
 func _on_GameStateMachine_exit_state():
 	match _game_state.current:
 		GameState.MAIN_MENU:
 			$MenuMusic.stop()
+			
 		GameState.INTRO:
-			$MainMenu.visible = false
+			$MainMenu.set_visible_hack(false, false)
 
 		GameState.GAME:
+			stop_level(State.level)
 			State.on_game_stopped()
 			$GameOverlay.visible = false
+			_ship.visible = false
+			_ship.booster_enabled = false
+			
+			for particle in $ParticleContainer.get_children():
+				particle.queue_free()
+				
+			for bullet in $BulletContainer.get_children():
+				bullet.queue_free()
 			
 			$MisteryMusic.stop()
+			
+		GameState.SUCCESS:
+			$Success.visible = false
+			$Success/CanvasLayer.visible = false
 
 
 func _on_MainMenu_intro_anim_finished():
@@ -267,3 +317,7 @@ func _update_star_anim_properties():
 	Globals.star_anim_right_left_factor = star_anim_right_left_factor
 	Globals.star_anim_speed = star_anim_speed
 	Globals.star_anim_top_down_factor = star_anim_top_down_factor
+
+
+func _on_SuccessContinueButton_pressed():
+	switch_game_state_to_main_menu()

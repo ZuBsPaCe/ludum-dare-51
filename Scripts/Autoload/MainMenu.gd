@@ -98,6 +98,14 @@ func restart_title_scale_tween():
 	tween.tween_property(_title_asteroid_blur, "scale", scale_mount, scale_mount.length() / 2.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	tween.connect("finished", self, "restart_title_scale_tween")
 
+func set_visible_hack(root: bool, menu: bool):
+	visible = root
+	$MainMenu.visible = menu
+	$Title.visible = menu
+	
+func reset_anim():
+	$AnimationPlayer.play("RESET")
+
 
 func _process(_delta):
 	_menu_ship.rotation = Globals.STAR_ANIM_SOURCE.angle_to_point(_menu_ship.global_position) + deg2rad(4)

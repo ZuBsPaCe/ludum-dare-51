@@ -69,7 +69,8 @@ func _process(delta):
 
 
 func start_shoot_sound():
-	Globals.sound.play(Globals.SOUND_SHOOT, position)
+	if Globals.sound:
+		Globals.sound.play(Globals.SOUND_SHOOT, position)
 
 
 func _set_collision_enabled(value):
