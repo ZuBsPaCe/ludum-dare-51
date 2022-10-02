@@ -99,6 +99,9 @@ func switch_game_state_to_game():
 func on_goal_reached(old_level_num: int, new_level_num: int):
 	stop_level(old_level_num)
 	
+	$TransitionAnimationPlayer.play("WarpRight")
+	yield(get_tree().create_timer(0.5), "timeout")
+	
 	if !start_level(new_level_num):
 		switch_game_state(GameState.MAIN_MENU)
 		
@@ -108,6 +111,8 @@ func on_ship_destroyed():
 
 func stop_level(level_num: int):
 	var level = _levels[level_num]
+	
+	get_tree().create_tween().tween_property(level, "modulate", Color(1.0, 1.0, 1.0, 0.0), 1.0)
 	
 	level.stop_level()
 	Tools.remove_from_parent(level)
