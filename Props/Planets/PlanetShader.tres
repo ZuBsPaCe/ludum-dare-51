@@ -1,0 +1,15 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+
+uniform float rot_speed = 0.1;
+uniform sampler2D planet_tex;
+
+void fragment() {
+	vec4 mask_col = texture(TEXTURE, UV) * 2.0;
+	vec4 planet_col = texture(planet_tex, vec2(UV.x + TIME * rot_speed, UV.y));
+	
+	COLOR = vec4(mask_col.rgb * planet_col.rgb, mask_col.a);
+}
+"

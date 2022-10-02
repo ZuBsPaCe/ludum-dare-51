@@ -1,12 +1,25 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+[gd_resource type="Shader" format=2]
 
-[sub_resource type="Shader" id=1]
+[resource]
 code = "shader_type canvas_item;
 render_mode unshaded;
 
-void vertex() {
-	UV.x *= length(WORLD_MATRIX[0]) * 2.0;
-}"
+uniform float scale = 1.0;
+uniform float speed = 1.0;
 
-[resource]
-shader = SubResource( 1 )
+varying float alpha;
+
+void vertex() {
+	float alpha1 = clamp(UV.x / 0.05, 0.0, 1.0);
+	float alpha2 = clamp((0.8 - UV.x) / 0.2, 0.0, 1.0);
+	
+	alpha = (alpha1 * alpha2);
+	
+	UV.x *= length(WORLD_MATRIX[0]) * scale;
+	UV.x += TIME * speed;
+}
+
+void fragment() {	
+	vec4 col = texture(TEXTURE, UV);
+	COLOR = vec4(col.rgb, col.a * alpha);
+}"

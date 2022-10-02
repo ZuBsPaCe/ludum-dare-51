@@ -6,7 +6,7 @@ const LevelState := preload("res://Scripts/LevelState.gd")
 
 onready var _level_state := $LevelStateMachine
 onready var _entity_container := $EntityContainer
-onready var _gravity_line := $GravityLine
+onready var _visuals_container := $VisualsContainer
 
 
 var initial_ship_position: Vector2
@@ -28,6 +28,8 @@ var _ship_velocity := Vector2.ZERO
 
 var _locked_planet: KinematicBody2D
 var _locked_distance: float
+
+var _gravity_lines := {}
 
 
 func _ready():
@@ -93,13 +95,14 @@ func reset(immediate: bool):
 			get_tree().create_tween().tween_property(entity, "rotation", _initial_rotations[entity], 1.0)
 			
 		yield(get_tree().create_timer(1.0), "timeout")
-	
-	_gravity_line.visible = false
+#
+#	_gravity_line.visible = false
 	
 
 func stop_level():
 	set_process(false)
 
+var dbg := 0.0
 
 func _process(delta: float):		
 	var nearest_planet = null
@@ -110,11 +113,7 @@ func _process(delta: float):
 		if nearest_distance < 0.0 || distance < nearest_distance:
 			nearest_planet = planet
 			nearest_distance = distance
-	
-	_gravity_line.visible = true
-	_gravity_line.position = nearest_planet.position
-	_gravity_line.rotation = _ship.position.angle_to_point(_gravity_line.position)
-	_gravity_line.scale.x = nearest_distance / 64.0		
+			
 	
 	match _level_state.current:			
 		LevelState.START:			
@@ -134,14 +133,34 @@ func _process(delta: float):
 			var planet_forces := Vector2.ZERO
 			
 			for planet in _planets:
-				var planet_vec: Vector2 = planet.position - _ship.position
-				var distance := planet_vec.length()
+				var inner_radius: float = 512.0 * planet.scale.x
+				var affect_distance: float = 400.0#inner_radius * 2.0
+				var outer_radius := inner_radius + affect_distance
 				
-				var force := (1.0 - distance / 500.0)
-
+				var planet_vec: Vector2 = planet.position - _ship.position
+				var distance: float = planet_vec.length()
+				
+				var force := 1.0 - clamp((distance - inner_radius) / affect_distance, 0.0, 1.0)
+				
+				var gravity_line: Node2D
+				
+				if !_gravity_lines.has(planet):
+					gravity_line = Creator.create_gravity_line(_visuals_container)
+					_gravity_lines[planet] = gravity_line
+				else:
+					gravity_line = _gravity_lines[planet]
+					
 				if force > 0.0:
-					force = force * force
-					planet_forces += planet_vec.normalized() * force * 2000.0
+					#force = force * force
+					planet_forces += planet_vec.normalized() * force * 1000.0
+				
+					gravity_line.visible = true
+					gravity_line.position = planet.position
+					gravity_line.rotation = _ship.position.angle_to_point(planet.position)
+					gravity_line.scale.x = distance / 64.0
+					gravity_line.modulate.a = force
+				else:
+					gravity_line.visible = false
 			
 			_ship_velocity += (booster_force + planet_forces) * delta
 			
@@ -168,17 +187,24 @@ func _on_LevelStateMachine_enter_state():
 			_ship.collision_enabled = true
 			
 		LevelState.GOAL_REACHED:
-			_ship.collision_enabled = false
-			_ship.booster_enabled = false
+			_cleanup()
 			
 			State.goal_reached()
 			
 		LevelState.SHIP_DESTROYED:
-			_ship.collision_enabled = false
-			_ship.booster_enabled = false
+			_cleanup()
 			
 			State.ship_destroyed()
 
+
+func _cleanup():
+	_ship.collision_enabled = false
+	_ship.booster_enabled = false
+	
+	for gravity_line in _gravity_lines.values():
+		gravity_line.queue_free()
+	_gravity_lines.clear()
+	
 
 func _on_LevelStateMachine_exit_state():
 	match _level_state.current:

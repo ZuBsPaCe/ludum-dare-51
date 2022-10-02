@@ -4,6 +4,7 @@ extends Node
 const _exhaust_particle_scene := preload("res://Helpers/Particles/ExhaustParticle.tscn")
 const _ship_particle_scene := preload("res://Helpers/Particles/ShipParticle.tscn")
 const _star_scene := preload("res://Helpers/Stars/Star.tscn")
+const _gravity_line_scene := preload("res://Helpers/GravityLine/GravityLine.tscn")
 
 
 var _particle_container: Node2D
@@ -64,3 +65,14 @@ func create_star(p_container: Node2D, p_frame: int, p_blink: bool, p_step_factor
 func destroy_star(particle: Node2D) -> void:
 	particle.get_parent().remove_child(particle)
 	_star_scene_cache.append(particle)
+	
+	
+func create_gravity_line(var container) -> Node2D:
+	var sprite: Node2D = _gravity_line_scene.instance()
+	container.add_child(sprite)
+	return sprite
+	
+
+func destroy_gravity_line(gravity_line: Node2D) -> void:
+	gravity_line.queue_free()
+	

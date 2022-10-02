@@ -3,7 +3,7 @@
 [ext_resource path="res://Scenes/LevelBase.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/Ship.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Props/Planet.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Props/Goal.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Props/Goal/Goal.tscn" type="PackedScene" id=4]
 
 [node name="Level 02" instance=ExtResource( 1 )]
 
@@ -12,9 +12,11 @@ position = Vector2( -832, 0 )
 
 [node name="Planet" parent="EntityContainer" index="1" instance=ExtResource( 3 )]
 position = Vector2( -283, -193 )
+scale = Vector2( 0.248592, 0.248592 )
 
 [node name="Planet2" parent="EntityContainer" index="2" instance=ExtResource( 3 )]
 position = Vector2( 224, 180 )
+scale = Vector2( 0.244687, 0.244687 )
 
 [node name="Goal" parent="." index="2" instance=ExtResource( 4 )]
 position = Vector2( 832, 0 )

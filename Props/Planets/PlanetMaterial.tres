@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://Props/Planets/PlanetShader.tres" type="Shader" id=1]
+[ext_resource path="res://Props/Planets/Planet1.png" type="Texture" id=2]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/rot_speed = 0.1
+shader_param/planet_tex = ExtResource( 2 )
