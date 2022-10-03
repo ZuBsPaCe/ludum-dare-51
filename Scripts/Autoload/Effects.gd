@@ -16,7 +16,8 @@ func shake(
 		intensity = 5.0, 
 		frequency = 20.0, 
 		duration = 0.5) -> void:
-	_camera.start_shake(dir, intensity, frequency, duration)
+	if _camera:
+		_camera.start_shake(dir, intensity, frequency, duration)
 
 
 	

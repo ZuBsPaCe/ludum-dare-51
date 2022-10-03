@@ -49,7 +49,8 @@ func hurt():
 	Creator.create_explosion(position, Vector2.ZERO)
 	Effects.shake(Vector2.RIGHT.rotated(Globals.rand_effect.randf() * TAU))
 	
-	Globals.sound.play(Globals.SOUND_ASTEROID_DESTROYED, position)
+	if Globals.sound:
+		Globals.sound.play(Globals.SOUND_ASTEROID_DESTROYED, position)
 	
 	visible = false
 	_collision_polygon.disabled = true

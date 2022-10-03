@@ -20,16 +20,53 @@ var _window_offset := 0.0
 var _target_window_offset := 0.0
 var _window_speed := 4.0 * 3.0
 
+var _last_global_mouse_pos: Vector2
 
+const deadzone = 0.25
 
 func _ready():
-	pass
+	_last_global_mouse_pos = Globals.get_global_mouse_position()
 
 
 func _process(delta):
 	var last_rotation := rotation
+	
+	var joy_hor := 0.0
+	var joy_ver := 0.0
+	var joy_pressed := false
 
-	rotation = Globals.get_global_mouse_position().angle_to_point(position)
+	var current_global_mouse_pos := Globals.get_global_mouse_position()
+	
+	var mouse_moved := _last_global_mouse_pos != current_global_mouse_pos
+			
+	if mouse_moved and Globals.using_joypad:
+		# Attention: Screen shaking leads to a mouse movement...
+		var mouse_moved_distance := _last_global_mouse_pos.distance_to(current_global_mouse_pos)
+	
+		if  mouse_moved_distance > 20.0:
+			Globals.using_joypad = false
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+	# Controller support was added post compo
+	if Globals.using_post_compo_version:
+		if Globals.using_joypad or not mouse_moved:		
+			joy_hor = Input.get_joy_axis(0, 0)
+			joy_ver = Input.get_joy_axis(0, 1)
+			
+			joy_pressed = abs(joy_hor) + abs(joy_ver) > deadzone
+			
+			if joy_pressed and !Globals.using_joypad:
+				Globals.using_joypad = true
+				Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+
+	if !Globals.using_joypad:
+		rotation = current_global_mouse_pos.angle_to_point(position)
+	elif joy_pressed:
+		var offset := joy_hor * Vector2.RIGHT + joy_ver * Vector2.DOWN
+		var target := position + offset
+		rotation = target.angle_to_point(position)
+	
+	_last_global_mouse_pos = current_global_mouse_pos
 	
 	var rotation_speed: float = (rotation - last_rotation) / delta
 	if rotation_speed > 0.0 and rotation_speed > PI * 0.25:
@@ -47,7 +84,7 @@ func _process(delta):
 	_window.position.y = _window_offset
 	
 	var ship_velocity := position - _last_position
-	var ship_velocity_dir := ship_velocity.normalized()
+	#var ship_velocity_dir := ship_velocity.normalized()
 	
 	if ship_velocity.length_squared() > 0.0:
 		_trail_countdown -= delta

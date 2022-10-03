@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Scripts/Autoload/Game.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Tools/CameraShake.gd" type="Script" id=2]
@@ -18,6 +18,10 @@
 [ext_resource path="res://Levels/Level 04.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Levels/Level 05.tscn" type="PackedScene" id=17]
 [ext_resource path="res://Levels/Level 06.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Levels/Level 08.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Levels/Level 07.tscn" type="PackedScene" id=20]
+[ext_resource path="res://Levels/Level 09.tscn" type="PackedScene" id=21]
+[ext_resource path="res://Levels/Level 10.tscn" type="PackedScene" id=22]
 
 [sub_resource type="Environment" id=1]
 background_mode = 4
@@ -214,6 +218,18 @@ visible = false
 visible = false
 
 [node name="Level 06" parent="Levels" instance=ExtResource( 18 )]
+visible = false
+
+[node name="Level 07" parent="Levels" instance=ExtResource( 20 )]
+visible = false
+
+[node name="Level 08" parent="Levels" instance=ExtResource( 19 )]
+visible = false
+
+[node name="Level 09" parent="Levels" instance=ExtResource( 21 )]
+visible = false
+
+[node name="Level 10" parent="Levels" instance=ExtResource( 22 )]
 visible = false
 
 [node name="Ship" parent="." instance=ExtResource( 9 )]

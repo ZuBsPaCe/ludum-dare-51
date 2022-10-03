@@ -12,6 +12,7 @@ const SETTING_WINDOW_WIDTH := "Window Width"
 const SETTING_WINDOW_HEIGHT := "Window Height"
 const SETTING_MUSIC_VOLUME := "Music"
 const SETTING_SOUND_VOLUME := "Sound"
+const SETTING_POST_COMPO := "PostCompoVersion"
 
 const GROUP_SHIP := "Ship"
 const GROUP_PLANET := "Planet"
@@ -40,6 +41,12 @@ var star_anim_top_down_factor: float
 var star_anim_3d_factor: float
 var star_anim_speed := 0.0
 
+# Prevent Alt+Enter from starting game or something
+var fullscreen_switching := false
+
+var using_joypad := false
+
+var using_post_compo_version := false
 
 func _ready():
 	_center_node = Node2D.new()
@@ -52,7 +59,8 @@ func setup():
 		Globals.SETTING_WINDOW_WIDTH: OS.get_screen_size().x / 2,
 		Globals.SETTING_WINDOW_HEIGHT: OS.get_screen_size().y / 2,
 		Globals.SETTING_MUSIC_VOLUME: 0.8,
-		Globals.SETTING_SOUND_VOLUME: 0.8
+		Globals.SETTING_SOUND_VOLUME: 0.8,
+		Globals.SETTING_POST_COMPO: false
 	}
 	
 	Tools.load_data("settings.json", _settings)
@@ -72,3 +80,11 @@ func save_settings():
 
 func get_global_mouse_position() -> Vector2:
 	return _center_node.get_global_mouse_position()
+
+
+func is_valid_compo_button():
+	return (
+		Input.is_mouse_button_pressed(BUTTON_LEFT) or
+		Input.is_mouse_button_pressed(BUTTON_RIGHT) or
+		Input.is_key_pressed(KEY_SPACE) or
+		Input.is_key_pressed(KEY_CONTROL))

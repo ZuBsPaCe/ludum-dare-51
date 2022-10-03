@@ -22,6 +22,7 @@ onready var _title_asteroid_blur := get_node("%AsteroidBlur")
 
 var _music_slider: Slider
 var _sound_slider: Slider
+var _post_compo_checkbox: CheckBox
 
 #var _ship_small_offset := Vector2.ZERO
 #var _ship_large_offset := Vector2.ZERO
@@ -37,6 +38,7 @@ func _ready():
 	
 	_music_slider = get_node("%MusicSlider")
 	_sound_slider = get_node("%SoundSlider")
+	_post_compo_checkbox = get_node("%PostCompoCheckbox")
 	
 	restart_small_menu_ship_tween()
 	restart_large_menu_ship_tween()
@@ -47,13 +49,19 @@ func _ready():
 	restart_title_scale_tween()
 	
 	get_node("%StartButton").grab_focus()
-		
+	
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	get_node("%PostCompoCheckbox").rect_scale = Vector2(3, 3)
 
 func setup(
 		p_music_factor: float, 
 		p_sound_factor: float):
 	_music_slider.value = p_music_factor
 	_sound_slider.value = p_sound_factor
+	
+	Globals.using_post_compo_version = Globals.get_setting(Globals.SETTING_POST_COMPO)
+	_post_compo_checkbox.pressed = Globals.using_post_compo_version
 
 
 func restart_small_menu_ship_tween():
@@ -104,6 +112,11 @@ func set_visible_hack(root: bool, menu: bool):
 	$MainMenu.visible = menu
 	$Title.visible = menu
 	
+	if menu:
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		get_node("%PostCompoCheckbox").rect_scale = Vector2(3, 3)
+	
 func reset_anim():
 	$AnimationPlayer.play("RESET")
 
@@ -113,10 +126,14 @@ func _process(_delta):
 	
 
 func _on_StartButton_pressed():
+	if Globals.fullscreen_switching:
+		return
 	emit_signal("switch_game_state", GameState.INTRO)
 
 
 func _on_ExitButton_pressed():
+	if Globals.fullscreen_switching:
+		return
 	get_tree().quit()
 
 
@@ -126,3 +143,8 @@ func _on_Volume_changed(_value):
 		_music_slider.value, 
 		_sound_slider.value)
 
+
+func _on_PostCompoCheckbox_pressed():
+	Globals.using_post_compo_version = _post_compo_checkbox.pressed
+	Globals.set_setting(Globals.SETTING_POST_COMPO, _post_compo_checkbox.pressed)
+	Globals.save_settings()

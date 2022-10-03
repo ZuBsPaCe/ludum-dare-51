@@ -7,7 +7,7 @@ const LevelState := preload("res://Scripts/LevelState.gd")
 onready var _level_state := $LevelStateMachine
 onready var _entity_container := $EntityContainer
 onready var _visuals_container := $VisualsContainer
-
+onready var space := $Space
 
 var initial_ship_position: Vector2
 var initial_ship_rotation: float
@@ -35,9 +35,11 @@ var _gravity_lines := {}
 var _shoot_cooldown := Cooldown.new()
 var _shoot_right := true
 
+var _debug_scene := false
+
 
 func _ready():
-	var debug_scene := get_tree().current_scene == self
+	_debug_scene = get_tree().current_scene == self
 	
 	for entity in _entity_container.get_children():
 		if entity.is_in_group(Globals.GROUP_SHIP):
@@ -72,7 +74,7 @@ func _ready():
 			
 	set_process(false)
 	
-	if debug_scene:
+	if _debug_scene:
 		Creator.setup(self, self)
 		$Camera2D.current = true
 		start_level(_ship)
@@ -136,17 +138,22 @@ func _process(delta: float):
 			nearest_planet = planet
 			nearest_distance = distance
 			
+				
+	# Controller support was added post compo
+	var valid_action := true
+	if !Globals.using_post_compo_version:
+		valid_action = Globals.is_valid_compo_button()
 	
 	match _level_state.current:			
 		LevelState.START:			
-			if Input.is_action_just_pressed("start"):
+			if valid_action and Input.is_action_just_pressed("start"):
 				_ship_velocity = Vector2.RIGHT.rotated(_ship.rotation) * _ship_move_speed
 				_level_state.set_state(LevelState.FLYING)
 		
 		LevelState.FLYING:			
 			var booster_force := Vector2.ZERO
 			
-			if Input.is_action_pressed("booster"):
+			if valid_action and Input.is_action_pressed("booster"):
 				booster_force = Vector2.RIGHT.rotated(_ship.rotation) * 500.0
 				_ship.booster_enabled = true
 			else:
@@ -197,6 +204,10 @@ func _process(delta: float):
 				reset = true
 			
 			if reset:
+				if _debug_scene:
+					get_tree().reload_current_scene()
+					return
+				
 				Creator.create_explosion(_ship.position, _ship_velocity * 0.5)
 				Globals.sound.play(Globals.SOUND_KILLED, _ship.position)
 				Effects.shake(_ship_velocity.normalized())
@@ -204,7 +215,7 @@ func _process(delta: float):
 				_level_state.set_state(LevelState.SHIP_DESTROYED)
 				return
 			
-			if Input.is_action_pressed("shoot") and _shoot_cooldown.done:
+			if valid_action and Input.is_action_pressed("shoot") and _shoot_cooldown.done:
 				_shoot_cooldown.restart()
 				
 				var bullet_offset: Vector2
@@ -222,6 +233,9 @@ func _process(delta: float):
 func _on_goal_body_entered(body: Node):
 	if body.is_in_group(Globals.GROUP_SHIP):
 		_level_state.set_state(LevelState.GOAL_REACHED)
+		
+		if _debug_scene:
+			get_tree().reload_current_scene()
 
 
 func _on_LevelStateMachine_enter_state():

@@ -21,6 +21,8 @@ export var star_anim_top_down_factor := 0.0
 export var star_anim_3d_factor := 1.0
 export var star_anim_speed := 1.0
 
+var _fullscreen_switching := false
+
 
 var _levels := {}
 
@@ -48,6 +50,8 @@ func _ready():
 	$Ship.visible = false
 	$Success.visible = false
 	$Success/CanvasLayer.visible = false
+	
+	$Camera2D.current = true
 	
 	$MainMenu.connect("switch_game_state", self, "switch_game_state")
 	$MainMenu.connect("change_volume", self, "change_volume")
@@ -104,9 +108,14 @@ func _process(delta):
 
 
 func _input(event):
-	if event is InputEventKey:
+	if event is InputEventKey:		
 		if event.pressed and not event.echo and event.alt and event.scancode == KEY_ENTER:
+			Globals.fullscreen_switching = true
 			set_fullscreen(!OS.window_fullscreen)
+	
+	if Globals.fullscreen_switching:
+		if !Input.is_key_pressed(KEY_ENTER) and !Input.is_key_pressed(KEY_ALT):
+			Globals.fullscreen_switching = false
 
 
 func on_screen_resized():
@@ -116,7 +125,7 @@ func on_screen_resized():
 		Globals.save_settings()
 		
 
-func switch_game_state(new_state):
+func switch_game_state(new_state):		
 	_game_state.set_state(new_state)
 
 func switch_game_state_to_game():
@@ -158,6 +167,10 @@ func start_level(level_num: int) -> bool:
 	if not _levels.has(level_num):
 		return false
 	
+	# Compo-Version only had 6 levels
+	if level_num > 6 and !Globals.using_post_compo_version:
+		return false
+	
 	var level = _levels[level_num]
 	
 	for bullet in $BulletContainer.get_children():
@@ -167,6 +180,23 @@ func start_level(level_num: int) -> bool:
 	level.reset(true)
 	level.modulate.a = 0.0
 	level.visible = true
+	
+	if Globals.using_post_compo_version:
+		level.space.modulate.a = 200.0 / 255.0
+		level.space.modulate.r = Globals.rand_effect.randf() * 0.4
+		level.space.modulate.g = Globals.rand_effect.randf() * 0.4
+		level.space.modulate.b = Globals.rand_effect.randf() * 0.4
+		level.space.scale.x = 1.0 if Globals.rand_effect.randf() > 0.5 else -1.0
+		level.space.scale.y = 1.0 if Globals.rand_effect.randf() > 0.5 else -1.0
+		level.space.visible = true	
+	else: 
+		if level_num == 1:
+			# Space background was only active on level 1...
+			level.space.visible = true
+			level.space.modulate = Color(0.07, 0.14, 0.41, 0.8)
+		else:
+			level.space.visible = false
+		
 	
 	get_tree().create_tween().tween_property(level, "modulate", Color.white, 1.0)
 	
@@ -259,6 +289,7 @@ func _on_GameStateMachine_enter_state():
 			$MainMenu.set_visible_hack(true, true)
 			$MainMenu.reset_anim()
 			$MenuMusic.play()
+			$MainMenu/MainMenu/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/StartButton.grab_focus()
 			
 		GameState.INTRO:
 			$TransitionAnimationPlayer.play("Intro")
@@ -278,6 +309,7 @@ func _on_GameStateMachine_enter_state():
 			level_running = false
 			$Success.visible = true
 			$Success/CanvasLayer.visible = true
+			$Success/CanvasLayer/MarginContainer/VBoxContainer/HBoxContainer/SuccessContinueButton.grab_focus()
 
 
 func _on_GameStateMachine_exit_state():

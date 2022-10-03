@@ -23,7 +23,8 @@ func disable_collision():
 func _process(delta):
 	var collision := move_and_collide(_velocity * delta)
 	if collision:
-		Globals.sound.play(Globals.SOUND_BULLET_HIT, position)
+		if Globals.sound:
+			Globals.sound.play(Globals.SOUND_BULLET_HIT, position)
 		
 		if !_disabled and collision.collider.is_in_group(Globals.GROUP_ASTEROID):
 			collision.collider.hurt()
