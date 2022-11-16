@@ -41,9 +41,7 @@ func _ready():
 	
 	set_fullscreen(Globals.get_setting(Globals.SETTING_FULLSCREEN))
 	
-	$MainMenu.setup(
-		Globals.get_setting(Globals.SETTING_MUSIC_VOLUME),
-		Globals.get_setting(Globals.SETTING_SOUND_VOLUME))
+	$MainMenu.setup()
 	
 	$MainMenu.visible = false
 	$GameOverlay.visible = false
@@ -93,13 +91,16 @@ func _process(delta):
 	_update_star_anim_properties()
 		
 	if level_running:
-		level_countdown -= delta
-		if level_countdown <= 0.0:
-			level_countdown = 0.0
-			level_running = false
-			restart_level()
-		
-		$GameOverlay.set_countdown(level_countdown)
+		if Globals.using_post_compo_version and Globals.easy_difficulty:
+			$GameOverlay.set_countdown_visible(false)
+		else:
+			level_countdown -= delta
+			if level_countdown <= 0.0:
+				level_countdown = 0.0
+				level_running = false
+				restart_level()
+			
+			$GameOverlay.set_countdown(level_countdown)
 
 		
 	
@@ -299,6 +300,7 @@ func _on_GameStateMachine_enter_state():
 		GameState.GAME:
 			State.on_game_start()
 			$GameOverlay.visible = true
+			$GameOverlay.set_countdown_visible(!Globals.using_post_compo_version or !Globals.easy_difficulty)
 			$MainMenu.set_visible_hack(false, false)
 			
 			$MisteryMusic.play()

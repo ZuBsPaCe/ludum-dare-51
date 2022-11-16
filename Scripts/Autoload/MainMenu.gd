@@ -20,25 +20,17 @@ onready var _title_avoid_blur := get_node("%AvoidBlur")
 onready var _title_asteroid_blur := get_node("%AsteroidBlur")
 
 
-var _music_slider: Slider
-var _sound_slider: Slider
-var _post_compo_checkbox: CheckBox
-
-#var _ship_small_offset := Vector2.ZERO
-#var _ship_large_offset := Vector2.ZERO
-#
-#var _title_avoid_offset := Vector2.ZERO
-#var _title_asteroid_offset := Vector2.ZERO
+onready var _music_slider := get_node("%MusicSlider")
+onready var _sound_slider := get_node("%SoundSlider")
+onready var _post_compo_checkbox := get_node("%PostCompoCheckbox")
+onready var _easy_difficulty_checkbox := get_node("%EasyDifficultyCheckbox")
+onready var _easy_difficulty_label := get_node("%EasyDifficultyLabel")
 
 
 func _ready():
 	# https://docs.godotengine.org/en/stable/tutorials/export/feature_tags.html
 	if OS.has_feature("web"):
 		get_node("%ExitButton").visible = false
-	
-	_music_slider = get_node("%MusicSlider")
-	_sound_slider = get_node("%SoundSlider")
-	_post_compo_checkbox = get_node("%PostCompoCheckbox")
 	
 	restart_small_menu_ship_tween()
 	restart_large_menu_ship_tween()
@@ -49,19 +41,17 @@ func _ready():
 	restart_title_scale_tween()
 	
 	get_node("%StartButton").grab_focus()
-	
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	get_node("%PostCompoCheckbox").rect_scale = Vector2(3, 3)
 
-func setup(
-		p_music_factor: float, 
-		p_sound_factor: float):
-	_music_slider.value = p_music_factor
-	_sound_slider.value = p_sound_factor
+
+func setup():
+	_music_slider.value = Globals.get_setting(Globals.SETTING_MUSIC_VOLUME)
+	_sound_slider.value = Globals.get_setting(Globals.SETTING_SOUND_VOLUME)
 	
-	Globals.using_post_compo_version = Globals.get_setting(Globals.SETTING_POST_COMPO)
 	_post_compo_checkbox.pressed = Globals.using_post_compo_version
+	_easy_difficulty_checkbox.pressed = Globals.easy_difficulty
+	
+	_easy_difficulty_checkbox.visible = Globals.using_post_compo_version
+	_easy_difficulty_label.visible = Globals.using_post_compo_version
 
 
 func restart_small_menu_ship_tween():
@@ -107,15 +97,12 @@ func restart_title_scale_tween():
 	tween.tween_property(_title_asteroid_blur, "scale", scale_mount, scale_mount.length() / 2.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	tween.connect("finished", self, "restart_title_scale_tween")
 
+
 func set_visible_hack(root: bool, menu: bool):
 	visible = root
 	$MainMenu.visible = menu
 	$Title.visible = menu
-	
-	if menu:
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		get_node("%PostCompoCheckbox").rect_scale = Vector2(3, 3)
+
 	
 func reset_anim():
 	$AnimationPlayer.play("RESET")
@@ -146,5 +133,16 @@ func _on_Volume_changed(_value):
 
 func _on_PostCompoCheckbox_pressed():
 	Globals.using_post_compo_version = _post_compo_checkbox.pressed
+	
+	_easy_difficulty_checkbox.visible = Globals.using_post_compo_version
+	_easy_difficulty_label.visible = Globals.using_post_compo_version
+	
 	Globals.set_setting(Globals.SETTING_POST_COMPO, _post_compo_checkbox.pressed)
+	Globals.save_settings()
+	
+	
+func _on_EasyDifficultyCheckbox_pressed():
+	Globals.easy_difficulty = _easy_difficulty_checkbox.pressed
+	
+	Globals.set_setting(Globals.SETTING_EASY_DIFFICULTY, _easy_difficulty_checkbox.pressed)
 	Globals.save_settings()

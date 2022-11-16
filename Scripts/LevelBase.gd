@@ -147,7 +147,12 @@ func _process(delta: float):
 	match _level_state.current:			
 		LevelState.START:			
 			if valid_action and Input.is_action_just_pressed("start"):
-				_ship_velocity = Vector2.RIGHT.rotated(_ship.rotation) * _ship_move_speed
+				
+				if Globals.using_post_compo_version and Globals.easy_difficulty:
+					_ship_velocity = Vector2.RIGHT.rotated(_ship.rotation) * _ship_move_speed * 0.4
+				else:
+					_ship_velocity = Vector2.RIGHT.rotated(_ship.rotation) * _ship_move_speed
+				
 				_level_state.set_state(LevelState.FLYING)
 		
 		LevelState.FLYING:			
@@ -195,7 +200,10 @@ func _process(delta: float):
 				else:
 					gravity_line.visible = false
 			
-			_ship_velocity += (booster_force + planet_forces) * delta
+			if Globals.using_post_compo_version and Globals.easy_difficulty:
+				_ship_velocity += (booster_force + planet_forces * 0.8) * delta * 0.4
+			else:	
+				_ship_velocity += (booster_force + planet_forces) * delta
 			
 			var reset := false
 			if _ship.move_and_collide(_ship_velocity * delta):

@@ -1,12 +1,16 @@
-[gd_resource type="Theme" load_steps=3 format=2]
+[gd_resource type="Theme" load_steps=5 format=2]
 
 [ext_resource path="res://Theme/Fonts/Visitor.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Helpers/Checkbox/Checkbox-Unchecked.png" type="Texture" id=2]
+[ext_resource path="res://Helpers/Checkbox/Checkbox-Checked.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
 [resource]
 default_font = ExtResource( 1 )
 Button/colors/font_color_hover = Color( 10, 0.51, 0, 1 )
+CheckBox/icons/checked = ExtResource( 3 )
+CheckBox/icons/unchecked = ExtResource( 2 )
 CheckBox/styles/focus = SubResource( 1 )
 MarginContainer/constants/margin_bottom = 10
 MarginContainer/constants/margin_left = 10

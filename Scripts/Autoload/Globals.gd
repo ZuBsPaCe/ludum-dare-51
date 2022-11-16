@@ -13,6 +13,7 @@ const SETTING_WINDOW_HEIGHT := "Window Height"
 const SETTING_MUSIC_VOLUME := "Music"
 const SETTING_SOUND_VOLUME := "Sound"
 const SETTING_POST_COMPO := "PostCompoVersion"
+const SETTING_EASY_DIFFICULTY := "EasyDifficulty"
 
 const GROUP_SHIP := "Ship"
 const GROUP_PLANET := "Planet"
@@ -47,6 +48,7 @@ var fullscreen_switching := false
 var using_joypad := false
 
 var using_post_compo_version := false
+var easy_difficulty := false
 
 func _ready():
 	_center_node = Node2D.new()
@@ -60,10 +62,14 @@ func setup():
 		Globals.SETTING_WINDOW_HEIGHT: OS.get_screen_size().y / 2,
 		Globals.SETTING_MUSIC_VOLUME: 0.8,
 		Globals.SETTING_SOUND_VOLUME: 0.8,
-		Globals.SETTING_POST_COMPO: false
+		Globals.SETTING_POST_COMPO: false,
+		Globals.SETTING_EASY_DIFFICULTY: false
 	}
 	
 	Tools.load_data("settings.json", _settings)
+	
+	Globals.using_post_compo_version = Globals.get_setting(Globals.SETTING_POST_COMPO)
+	Globals.easy_difficulty = Globals.get_setting(Globals.SETTING_EASY_DIFFICULTY)
 
 
 func get_setting(name: String):

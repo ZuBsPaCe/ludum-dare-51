@@ -35,6 +35,7 @@ func _on_MainMenuButton_pressed():
 
 func set_countdown(time: float):
 	_countdown.text = "%1.1f" % time
+	_countdown.visible = true
 	
 	if time <= 3.0:
 		_countdown.modulate.g = 0.0
@@ -50,3 +51,6 @@ func set_countdown(time: float):
 	
 	_last_time = time
 	
+
+func set_countdown_visible(state: bool):
+	_countdown.visible = state
